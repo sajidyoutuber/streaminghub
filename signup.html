@@ -7,12 +7,11 @@
     <meta name="keywords" content="Anime, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Anime | Template</title>
+    <title>Anime | Sign Up</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
@@ -23,6 +22,46 @@
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+    <style>
+        .login__form .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .login__form .success-message {
+            color: #2ecc71;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .login__form .info-message {
+            color: #f39c12;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .btn-disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .login__social__links ul li {
+            margin-bottom: 10px;
+        }
+        .signup .login__form h5 {
+            margin-top: 15px;
+            font-size: 16px;
+        }
+        .signup .login__form h5 a {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        .signup .login__form h5 a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
@@ -82,7 +121,7 @@
                 <div class="col-lg-12 text-center">
                     <div class="normal__breadcrumb__text">
                         <h2>Sign Up</h2>
-                        <p>Welcome to the official Anime blog.</p>
+                        <p>Welcome to the official Anime blog.</p>
                     </div>
                 </div>
             </div>
@@ -97,32 +136,32 @@
                 <div class="col-lg-6">
                     <div class="login__form">
                         <h3>Sign Up</h3>
-                        <form action="#">
+                        <form id="signupForm">
                             <div class="input__item">
-                                <input type="text" placeholder="Email address">
+                                <input type="email" id="emailInput" placeholder="Email address" required>
                                 <span class="icon_mail"></span>
                             </div>
                             <div class="input__item">
-                                <input type="text" placeholder="Your Name">
+                                <input type="text" id="nameInput" placeholder="Your Name">
                                 <span class="icon_profile"></span>
                             </div>
                             <div class="input__item">
-                                <input type="text" placeholder="Password">
+                                <input type="password" id="passwordInput" placeholder="Password (min 6 chars)" required>
                                 <span class="icon_lock"></span>
                             </div>
-                            <button type="submit" class="site-btn">Login Now</button>
+                            <button type="submit" class="site-btn" id="signupBtn">Sign Up</button>
+                            <div id="signupMessage" class="error-message"></div>
                         </form>
-                        <h5>Already have an account? <a href="#">Log In!</a></h5>
+                        <h5>Already have an account? <a href="./login.html">Log In!</a></h5>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="login__social__links">
-                        <h3>Login With:</h3>
+                        <h3>Sign Up With:</h3>
                         <ul>
-                            <li><a href="#" class="facebook"><i class="fa fa-facebook"></i> Sign in With Facebook</a>
-                            </li>
-                            <li><a href="#" class="google"><i class="fa fa-google"></i> Sign in With Google</a></li>
-                            <li><a href="#" class="twitter"><i class="fa fa-twitter"></i> Sign in With Twitter</a></li>
+                            <li><a href="#" class="facebook" id="facebookSignUp"><i class="fa fa-facebook"></i> Sign in With Facebook</a></li>
+                            <li><a href="#" class="google" id="googleSignUp"><i class="fa fa-google"></i> Sign in With Google</a></li>
+                            <li><a href="#" class="twitter" id="twitterSignUp"><i class="fa fa-twitter"></i> Sign in With Twitter</a></li>
                         </ul>
                     </div>
                 </div>
@@ -154,18 +193,17 @@
                     </div>
                 </div>
                 <div class="col-lg-3">
-                    <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                      Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                      <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                    <p>
+                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
 
-                  </div>
-              </div>
-          </div>
-      </footer>
-      <!-- Footer Section End -->
-
-      <!-- Search model Begin -->
-      <div class="search-model">
+    <!-- Search model Begin -->
+    <div class="search-model">
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch"><i class="icon_close"></i></div>
             <form class="search-model-form">
@@ -184,6 +222,180 @@
     <script src="js/jquery.slicknav.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
+
+    <!-- Firebase config and authentication logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyDqyJr6gMzwM0HJNeU_BP5EbG5Nxyhpaqw",
+                authDomain: "streaming-hub-67.firebaseapp.com",
+                projectId: "streaming-hub-67",
+                storageBucket: "streaming-hub-67.firebasestorage.app",
+                messagingSenderId: "99843602028",
+                appId: "1:99843602028:web:0a5a52606c2919498c4a49",
+                measurementId: "G-T3S9SEEBD7"
+            };
+
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+
+            // DOM elements
+            const emailInput = document.getElementById('emailInput');
+            const nameInput = document.getElementById('nameInput');
+            const passwordInput = document.getElementById('passwordInput');
+            const signupForm = document.getElementById('signupForm');
+            const signupMessage = document.getElementById('signupMessage');
+            const signupBtn = document.getElementById('signupBtn');
+
+            // Helper to show messages
+            function showMessage(text, type) {
+                signupMessage.textContent = text;
+                signupMessage.className = type + '-message';
+            }
+
+            // --- Email/Password Sign Up ---
+            signupForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = emailInput.value.trim();
+                const password = passwordInput.value.trim();
+                const displayName = nameInput.value.trim();
+
+                if (!email || !password) {
+                    showMessage('Please fill in all required fields.', 'error');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    showMessage('Password must be at least 6 characters.', 'error');
+                    return;
+                }
+
+                signupBtn.disabled = true;
+                signupBtn.textContent = 'Creating account...';
+                signupBtn.classList.add('btn-disabled');
+
+                auth.createUserWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        // Update profile with display name
+                        const user = userCredential.user;
+                        if (displayName) {
+                            user.updateProfile({
+                                displayName: displayName
+                            }).then(() => {
+                                console.log('Display name updated');
+                            }).catch((err) => {
+                                console.warn('Could not update display name:', err.message);
+                            });
+                        }
+                        showMessage('Account created successfully! Redirecting...', 'success');
+                        setTimeout(() => {
+                            window.location.href = './index.html';
+                        }, 1500);
+                    })
+                    .catch((error) => {
+                        let errorMsg = error.message;
+                        if (error.code === 'auth/email-already-in-use') {
+                            errorMsg = 'This email is already registered. Please log in.';
+                        } else if (error.code === 'auth/invalid-email') {
+                            errorMsg = 'Please enter a valid email address.';
+                        } else if (error.code === 'auth/weak-password') {
+                            errorMsg = 'Password is too weak. Please use at least 6 characters.';
+                        } else if (error.code === 'auth/operation-not-allowed') {
+                            errorMsg = 'Email/password accounts are not enabled. Please enable in Firebase Console.';
+                        }
+                        showMessage(errorMsg, 'error');
+                        signupBtn.disabled = false;
+                        signupBtn.textContent = 'Sign Up';
+                        signupBtn.classList.remove('btn-disabled');
+                    });
+            });
+
+            // --- Google Sign Up ---
+            document.getElementById('googleSignUp').addEventListener('click', function(e) {
+                e.preventDefault();
+                const provider = new firebase.auth.GoogleAuthProvider();
+                auth.signInWithPopup(provider)
+                    .then((result) => {
+                        showMessage('Google sign-up successful! Redirecting...', 'success');
+                        setTimeout(() => {
+                            window.location.href = './index.html';
+                        }, 1500);
+                    })
+                    .catch((error) => {
+                        let errorMsg = error.message;
+                        if (error.code === 'auth/unauthorized-domain') {
+                            errorMsg = '⚠️ This domain is not authorized. Please add "aurasajid.github.io" to authorized domains in Firebase Console > Authentication > Settings.';
+                        } else if (error.code === 'auth/popup-closed-by-user') {
+                            errorMsg = 'Sign-in popup was closed. Please try again.';
+                        } else if (error.code === 'auth/popup-blocked') {
+                            errorMsg = 'Popup was blocked. Please allow popups for this site.';
+                        } else if (error.code === 'auth/account-exists-with-different-credential') {
+                            errorMsg = 'An account already exists with this email using a different sign-in method.';
+                        }
+                        showMessage(errorMsg, 'error');
+                    });
+            });
+
+            // --- Facebook Sign Up ---
+            document.getElementById('facebookSignUp').addEventListener('click', function(e) {
+                e.preventDefault();
+                const provider = new firebase.auth.FacebookAuthProvider();
+                auth.signInWithPopup(provider)
+                    .then((result) => {
+                        showMessage('Facebook sign-up successful! Redirecting...', 'success');
+                        setTimeout(() => {
+                            window.location.href = './index.html';
+                        }, 1500);
+                    })
+                    .catch((error) => {
+                        let errorMsg = error.message;
+                        if (error.code === 'auth/unauthorized-domain') {
+                            errorMsg = '⚠️ This domain is not authorized. Please add "aurasajid.github.io" to authorized domains in Firebase Console.';
+                        } else if (error.code === 'auth/popup-closed-by-user') {
+                            errorMsg = 'Sign-in popup was closed. Please try again.';
+                        } else if (error.code === 'auth/account-exists-with-different-credential') {
+                            errorMsg = 'An account already exists with this email using a different sign-in method.';
+                        }
+                        showMessage(errorMsg, 'error');
+                    });
+            });
+
+            // --- Twitter Sign Up ---
+            document.getElementById('twitterSignUp').addEventListener('click', function(e) {
+                e.preventDefault();
+                const provider = new firebase.auth.TwitterAuthProvider();
+                auth.signInWithPopup(provider)
+                    .then((result) => {
+                        showMessage('Twitter sign-up successful! Redirecting...', 'success');
+                        setTimeout(() => {
+                            window.location.href = './index.html';
+                        }, 1500);
+                    })
+                    .catch((error) => {
+                        let errorMsg = error.message;
+                        if (error.code === 'auth/unauthorized-domain') {
+                            errorMsg = '⚠️ This domain is not authorized. Please add "aurasajid.github.io" to authorized domains in Firebase Console.';
+                        } else if (error.code === 'auth/popup-closed-by-user') {
+                            errorMsg = 'Sign-in popup was closed. Please try again.';
+                        } else if (error.code === 'auth/account-exists-with-different-credential') {
+                            errorMsg = 'An account already exists with this email using a different sign-in method.';
+                        }
+                        showMessage(errorMsg, 'error');
+                    });
+            });
+
+            // Check auth state
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    console.log('User is signed in:', user.email);
+                }
+            });
+
+        });
+    </script>
 
 </body>
 
