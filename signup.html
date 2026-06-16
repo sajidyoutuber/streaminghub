@@ -61,6 +61,32 @@
         .signup .login__form h5 a:hover {
             text-decoration: underline;
         }
+        /* Social buttons styling */
+        .login__social__links ul li a {
+            display: block;
+            padding: 10px 20px;
+            border-radius: 4px;
+            color: #fff;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .login__social__links ul li a.facebook {
+            background: #3b5998;
+        }
+        .login__social__links ul li a.google {
+            background: #dd4b39;
+        }
+        .login__social__links ul li a.twitter {
+            background: #1da1f2;
+        }
+        .login__social__links ul li a:hover {
+            opacity: 0.85;
+            transform: translateY(-2px);
+            color: #fff;
+        }
+        .login__social__links ul li a i {
+            margin-right: 10px;
+        }
     </style>
 </head>
 
@@ -159,9 +185,9 @@
                     <div class="login__social__links">
                         <h3>Sign Up With:</h3>
                         <ul>
-                            <li><a href="#" class="facebook" id="facebookSignUp"><i class="fa fa-facebook"></i> Sign in With Facebook</a></li>
-                            <li><a href="#" class="google" id="googleSignUp"><i class="fa fa-google"></i> Sign in With Google</a></li>
-                            <li><a href="#" class="twitter" id="twitterSignUp"><i class="fa fa-twitter"></i> Sign in With Twitter</a></li>
+                            <li><a href="#" class="facebook" id="facebookSignUp"><i class="fa fa-facebook"></i> Facebook</a></li>
+                            <li><a href="#" class="google" id="googleSignUp"><i class="fa fa-google"></i> Google</a></li>
+                            <li><a href="#" class="twitter" id="twitterSignUp"><i class="fa fa-twitter"></i> Twitter</a></li>
                         </ul>
                     </div>
                 </div>
@@ -225,23 +251,29 @@
 
     <!-- Firebase config and authentication logic -->
     <script>
+        // Initialize Firebase outside DOMContentLoaded to ensure it's available
+        const firebaseConfig = {
+            apiKey: "AIzaSyDqyJr6gMzwM0HJNeU_BP5EbG5Nxyhpaqw",
+            authDomain: "streaming-hub-67.firebaseapp.com",
+            projectId: "streaming-hub-67",
+            storageBucket: "streaming-hub-67.firebasestorage.app",
+            messagingSenderId: "99843602028",
+            appId: "1:99843602028:web:0a5a52606c2919498c4a49",
+            measurementId: "G-T3S9SEEBD7"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Enable Google Auth provider explicitly
+        const googleProvider = new firebase.auth.GoogleAuthProvider();
+        const facebookProvider = new firebase.auth.FacebookAuthProvider();
+        const twitterProvider = new firebase.auth.TwitterAuthProvider();
+
+        console.log('Firebase initialized successfully');
+
         document.addEventListener('DOMContentLoaded', function() {
-
-            // Firebase configuration
-            const firebaseConfig = {
-                apiKey: "AIzaSyDqyJr6gMzwM0HJNeU_BP5EbG5Nxyhpaqw",
-                authDomain: "streaming-hub-67.firebaseapp.com",
-                projectId: "streaming-hub-67",
-                storageBucket: "streaming-hub-67.firebasestorage.app",
-                messagingSenderId: "99843602028",
-                appId: "1:99843602028:web:0a5a52606c2919498c4a49",
-                measurementId: "G-T3S9SEEBD7"
-            };
-
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
-            const auth = firebase.auth();
-
             // DOM elements
             const emailInput = document.getElementById('emailInput');
             const nameInput = document.getElementById('nameInput');
@@ -254,6 +286,7 @@
             function showMessage(text, type) {
                 signupMessage.textContent = text;
                 signupMessage.className = type + '-message';
+                signupMessage.style.display = 'block';
             }
 
             // --- Email/Password Sign Up ---
@@ -279,7 +312,6 @@
 
                 auth.createUserWithEmailAndPassword(email, password)
                     .then((userCredential) => {
-                        // Update profile with display name
                         const user = userCredential.user;
                         if (displayName) {
                             user.updateProfile({
@@ -316,15 +348,18 @@
             // --- Google Sign Up ---
             document.getElementById('googleSignUp').addEventListener('click', function(e) {
                 e.preventDefault();
-                const provider = new firebase.auth.GoogleAuthProvider();
-                auth.signInWithPopup(provider)
+                console.log('Google sign-up clicked');
+                
+                auth.signInWithPopup(googleProvider)
                     .then((result) => {
+                        console.log('Google sign-up success:', result.user);
                         showMessage('Google sign-up successful! Redirecting...', 'success');
                         setTimeout(() => {
                             window.location.href = './index.html';
                         }, 1500);
                     })
                     .catch((error) => {
+                        console.error('Google sign-up error:', error.code, error.message);
                         let errorMsg = error.message;
                         if (error.code === 'auth/unauthorized-domain') {
                             errorMsg = '⚠️ This domain is not authorized. Please add "aurasajid.github.io" to authorized domains in Firebase Console > Authentication > Settings.';
@@ -333,7 +368,7 @@
                         } else if (error.code === 'auth/popup-blocked') {
                             errorMsg = 'Popup was blocked. Please allow popups for this site.';
                         } else if (error.code === 'auth/account-exists-with-different-credential') {
-                            errorMsg = 'An account already exists with this email using a different sign-in method.';
+                            errorMsg = 'An account already exists with this email using a different sign-in method. Please log in instead.';
                         }
                         showMessage(errorMsg, 'error');
                     });
@@ -342,22 +377,27 @@
             // --- Facebook Sign Up ---
             document.getElementById('facebookSignUp').addEventListener('click', function(e) {
                 e.preventDefault();
-                const provider = new firebase.auth.FacebookAuthProvider();
-                auth.signInWithPopup(provider)
+                console.log('Facebook sign-up clicked');
+                
+                auth.signInWithPopup(facebookProvider)
                     .then((result) => {
+                        console.log('Facebook sign-up success:', result.user);
                         showMessage('Facebook sign-up successful! Redirecting...', 'success');
                         setTimeout(() => {
                             window.location.href = './index.html';
                         }, 1500);
                     })
                     .catch((error) => {
+                        console.error('Facebook sign-up error:', error.code, error.message);
                         let errorMsg = error.message;
                         if (error.code === 'auth/unauthorized-domain') {
                             errorMsg = '⚠️ This domain is not authorized. Please add "aurasajid.github.io" to authorized domains in Firebase Console.';
                         } else if (error.code === 'auth/popup-closed-by-user') {
                             errorMsg = 'Sign-in popup was closed. Please try again.';
+                        } else if (error.code === 'auth/popup-blocked') {
+                            errorMsg = 'Popup was blocked. Please allow popups for this site.';
                         } else if (error.code === 'auth/account-exists-with-different-credential') {
-                            errorMsg = 'An account already exists with this email using a different sign-in method.';
+                            errorMsg = 'An account already exists with this email using a different sign-in method. Please log in instead.';
                         }
                         showMessage(errorMsg, 'error');
                     });
@@ -366,22 +406,27 @@
             // --- Twitter Sign Up ---
             document.getElementById('twitterSignUp').addEventListener('click', function(e) {
                 e.preventDefault();
-                const provider = new firebase.auth.TwitterAuthProvider();
-                auth.signInWithPopup(provider)
+                console.log('Twitter sign-up clicked');
+                
+                auth.signInWithPopup(twitterProvider)
                     .then((result) => {
+                        console.log('Twitter sign-up success:', result.user);
                         showMessage('Twitter sign-up successful! Redirecting...', 'success');
                         setTimeout(() => {
                             window.location.href = './index.html';
                         }, 1500);
                     })
                     .catch((error) => {
+                        console.error('Twitter sign-up error:', error.code, error.message);
                         let errorMsg = error.message;
                         if (error.code === 'auth/unauthorized-domain') {
                             errorMsg = '⚠️ This domain is not authorized. Please add "aurasajid.github.io" to authorized domains in Firebase Console.';
                         } else if (error.code === 'auth/popup-closed-by-user') {
                             errorMsg = 'Sign-in popup was closed. Please try again.';
+                        } else if (error.code === 'auth/popup-blocked') {
+                            errorMsg = 'Popup was blocked. Please allow popups for this site.';
                         } else if (error.code === 'auth/account-exists-with-different-credential') {
-                            errorMsg = 'An account already exists with this email using a different sign-in method.';
+                            errorMsg = 'An account already exists with this email using a different sign-in method. Please log in instead.';
                         }
                         showMessage(errorMsg, 'error');
                     });
@@ -390,10 +435,11 @@
             // Check auth state
             auth.onAuthStateChanged((user) => {
                 if (user) {
-                    console.log('User is signed in:', user.email);
+                    console.log('User is signed in:', user.email, user.displayName);
                 }
             });
 
+            console.log('Signup page initialized');
         });
     </script>
 
