@@ -15,7 +15,7 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js">
     </script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js">
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js">
     </script>
 
     <style>
@@ -349,6 +349,22 @@
             color: #fff;
         }
 
+        .btn-sync {
+            background: rgba(46, 204, 113, 0.15);
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, 0.2);
+            padding: 4px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: var(--transition);
+        }
+
+        .btn-sync:hover {
+            background: #2ecc71;
+            color: #fff;
+        }
+
         /* ---- Cards Grid ---- */
         .cards-grid {
             display: grid;
@@ -420,6 +436,16 @@
             margin-top: 2px;
         }
 
+        .admin-card .card-body .episode-badge {
+            display: inline-block;
+            background: var(--accent-glow);
+            color: var(--accent);
+            font-size: 10px;
+            padding: 1px 8px;
+            border-radius: 10px;
+            margin-top: 4px;
+        }
+
         /* ---- Form Modals ---- */
         .modal-overlay {
             display: none;
@@ -441,7 +467,7 @@
             background: var(--bg-secondary);
             border-radius: var(--radius);
             padding: 32px;
-            max-width: 520px;
+            max-width: 580px;
             width: 100%;
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
@@ -575,6 +601,10 @@
             border-left-color: var(--accent);
         }
 
+        .toast.info {
+            border-left-color: #3498db;
+        }
+
         @keyframes slideUp {
             from {
                 opacity: 0;
@@ -586,7 +616,7 @@
             }
         }
 
-        /* ---- Video URL input (special) ---- */
+        /* ---- Video URL display ---- */
         .video-url-display {
             background: var(--bg-input);
             padding: 10px 14px;
@@ -596,6 +626,32 @@
             word-break: break-all;
             border: 1px solid var(--border-color);
             margin-top: 6px;
+        }
+
+        /* ---- Sync status ---- */
+        .sync-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .sync-status .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .sync-status .dot.synced {
+            background: #2ecc71;
+        }
+        .sync-status .dot.unsynced {
+            background: #f39c12;
+        }
+        .sync-status .dot.error {
+            background: var(--accent);
         }
 
         /* ============================================================
@@ -686,11 +742,11 @@
         <form id="loginForm" autocomplete="off">
             <div class="form-group">
                 <label for="adminEmail">Email Address</label>
-                <input type="email" id="adminEmail" placeholder="admin@example.com" required>
+                <input type="email" id="adminEmail" placeholder="admin@streaminghub.com" value="admin@streaminghub.com">
             </div>
             <div class="form-group">
                 <label for="adminPassword">Password</label>
-                <input type="password" id="adminPassword" placeholder="Enter your password" required>
+                <input type="password" id="adminPassword" placeholder="Enter your password" value="123456">
             </div>
             <button type="submit" class="login-btn" id="loginBtn">Sign In</button>
             <div class="error-msg" id="loginError"></div>
@@ -711,7 +767,12 @@
             </div>
             <div class="user-info">
                 <div class="avatar" id="adminAvatar">A</div>
-                <span class="email" id="adminEmailDisplay">admin@example.com</span>
+                <span class="email" id="adminEmailDisplay">admin@streaminghub.com</span>
+                <span class="sync-status" id="syncStatus">
+                    <span class="dot unsynced" id="syncDot"></span>
+                    <span id="syncLabel">Unsaved</span>
+                </span>
+                <button class="btn-sync" id="syncToFirestoreBtn"><i class="fas fa-cloud-upload-alt"></i> Sync</button>
                 <button class="logout-btn" id="adminLogout"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
         </div>
@@ -725,6 +786,7 @@
                 <div>
                     <span class="badge-count" id="heroCount">0 slides</span>
                     <button class="btn-add btn-add-sm" onclick="openModal('hero')"><i class="fas fa-plus"></i> Add</button>
+                    <button class="btn-add btn-add-sm" onclick="loadFromFirestore()" style="background:#2ecc71;"><i class="fas fa-cloud-download-alt"></i> Load</button>
                 </div>
             </div>
             <div class="cards-grid" id="heroGrid"></div>
@@ -736,7 +798,8 @@
             </div>
             <div class="video-url-display" id="videoUrlDisplay">https://www.youtube.com/embed/...</div>
 
-            <!-- ====== TRENDING ====== -->
+            <!-- ====== ANIME COLLECTIONS ====== -->
+            <!-- TRENDING -->
             <div class="section-header">
                 <h3><i class="fas fa-fire"></i> Trending Now</h3>
                 <div>
@@ -746,7 +809,7 @@
             </div>
             <div class="cards-grid" id="trendingGrid"></div>
 
-            <!-- ====== POPULAR ====== -->
+            <!-- POPULAR -->
             <div class="section-header">
                 <h3><i class="fas fa-star"></i> Popular Shows</h3>
                 <div>
@@ -756,7 +819,7 @@
             </div>
             <div class="cards-grid" id="popularGrid"></div>
 
-            <!-- ====== RECENTLY ADDED ====== -->
+            <!-- RECENTLY ADDED -->
             <div class="section-header">
                 <h3><i class="fas fa-clock"></i> Recently Added</h3>
                 <div>
@@ -766,7 +829,7 @@
             </div>
             <div class="cards-grid" id="recentGrid"></div>
 
-            <!-- ====== LIVE ACTION ====== -->
+            <!-- LIVE ACTION -->
             <div class="section-header">
                 <h3><i class="fas fa-video"></i> Live Action</h3>
                 <div>
@@ -776,7 +839,7 @@
             </div>
             <div class="cards-grid" id="liveGrid"></div>
 
-            <!-- ====== TOP VIEWS ====== -->
+            <!-- TOP VIEWS -->
             <div class="section-header">
                 <h3><i class="fas fa-chart-simple"></i> Top Views (Sidebar)</h3>
                 <div>
@@ -786,7 +849,7 @@
             </div>
             <div class="cards-grid" id="topViewsGrid"></div>
 
-            <!-- ====== COMMENTS ====== -->
+            <!-- COMMENTS -->
             <div class="section-header">
                 <h3><i class="fas fa-comment"></i> Latest Comments</h3>
                 <div>
@@ -848,12 +911,25 @@
             };
 
             firebase.initializeApp(firebaseConfig);
-            const auth = firebase.auth();
+            const db = firebase.firestore();
+
+            // ============================================================
+            // HARDCODED ADMIN CREDENTIALS
+            // ============================================================
+            const ADMIN_CREDENTIALS = {
+                email: 'admin@streaminghub.com',
+                password: '123456'
+            };
 
             // ============================================================
             // STATE
             // ============================================================
             const STORAGE_PREFIX = 'streaminghub_';
+            let isSynced = false;
+            let syncError = false;
+
+            // Firestore collection name
+            const FIRESTORE_COLLECTION = 'websiteData';
 
             const COLLECTIONS = {
                 hero: { label: 'Hero Banners', default: [] },
@@ -881,59 +957,47 @@
                 ],
                 trending: [
                     { title: 'The Seven Deadly Sins: Wrath of the Gods', image: 'img/trending/trend-1.jpg',
-                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'] },
+                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] },
                     { title: 'Gintama Movie 2: Kanketsu-hen', image: 'img/trending/trend-2.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
+                        views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] },
                     { title: 'Shingeki no Kyojin Season 3 Part 2', image: 'img/trending/trend-3.jpg',
-                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Fullmetal Alchemist: Brotherhood', image: 'img/trending/trend-4.jpg',
-                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Shiratorizawa Gakuen Koukou', image: 'img/trending/trend-5.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Code Geass: Hangyaku no Lelouch R2', image: 'img/trending/trend-6.jpg',
-                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'] }
+                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 3,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] }
                 ],
                 popular: [
                     { title: 'Sen to Chihiro no Kamikakushi', image: 'img/popular/popular-1.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
+                        views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] },
                     { title: 'Kizumonogatari III: Reiket su-hen', image: 'img/popular/popular-2.jpg',
-                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'] },
+                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] },
                     { title: 'Shirogane Tamashii hen Kouhan sen', image: 'img/popular/popular-3.jpg',
-                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Rurouni Kenshin: Meiji Kenkaku', image: 'img/popular/popular-4.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Mushishi Zoku Shou 2nd Season', image: 'img/popular/popular-5.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Monogatari Series: Second Season', image: 'img/popular/popular-6.jpg',
-                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'] }
+                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] }
                 ],
                 recent: [
                     { title: 'Great Teacher Onizuka', image: 'img/recent/recent-1.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
+                        views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] },
                     { title: 'Fate/stay night: Heaven\'s Feel II', image: 'img/recent/recent-2.jpg',
-                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'] },
+                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] },
                     { title: 'Mushishi Zoku Shou: Suzu no Shizuku', image: 'img/recent/recent-3.jpg',
-                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Fate/Zero 2nd Season', image: 'img/recent/recent-4.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Kizumonogatari II: Nekket su-hen', image: 'img/recent/recent-5.jpg',
-                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'The Seven Deadly Sins: Wrath', image: 'img/recent/recent-6.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] }
+                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] }
                 ],
                 live: [
                     { title: 'Shouwa Genroku Rakugo Shinjuu', image: 'img/live/live-1.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
+                        views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] },
                     { title: 'Mushishi Zoku Shou 2nd Season', image: 'img/live/live-2.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
+                        views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] },
                     { title: 'Mushishi Zoku Shou: Suzu', image: 'img/live/live-3.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'The Seven Deadly Sins: Wrath', image: 'img/live/live-4.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Fate/stay night: Heaven\'s Feel II', image: 'img/live/live-5.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Kizumonogatari II: Nekketsu', image: 'img/live/live-6.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] }
+                        views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] }
                 ],
                 topViews: [
                     { title: 'Boruto: Naruto next generations', image: 'img/sidebar/tv-1.jpg', ep: '18 / ?',
@@ -964,16 +1028,12 @@
                     const raw = localStorage.getItem(STORAGE_PREFIX + key);
                     if (raw) {
                         const parsed = JSON.parse(raw);
-                        // If array, ensure it's an array
                         if (Array.isArray(parsed)) return parsed;
-                        // If it's an object (like videoUrl), return as-is
                         return parsed;
                     }
                 } catch (e) { /* ignore */ }
-                // Return default
                 const def = DEFAULT_DATA[key];
                 if (def !== undefined) {
-                    // Save default to localStorage
                     localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify(def));
                     return def;
                 }
@@ -982,6 +1042,7 @@
 
             function setData(key, value) {
                 localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify(value));
+                updateSyncStatus(false);
             }
 
             function showToast(message, type = 'success') {
@@ -992,12 +1053,74 @@
                 container.appendChild(toast);
                 setTimeout(() => {
                     toast.remove();
-                }, 3500);
+                }, 4000);
             }
 
             function getInitials(name) {
                 if (!name) return 'A';
                 return name.charAt(0).toUpperCase();
+            }
+
+            function updateSyncStatus(synced) {
+                isSynced = synced;
+                const dot = document.getElementById('syncDot');
+                const label = document.getElementById('syncLabel');
+                if (synced) {
+                    dot.className = 'dot synced';
+                    label.textContent = 'Synced';
+                } else {
+                    dot.className = 'dot unsynced';
+                    label.textContent = 'Unsaved';
+                }
+            }
+
+            // ============================================================
+            // FIRESTORE OPERATIONS
+            // ============================================================
+            function getAllData() {
+                const data = {};
+                Object.keys(DEFAULT_DATA).forEach(key => {
+                    data[key] = getData(key);
+                });
+                return data;
+            }
+
+            async function syncToFirestore() {
+                try {
+                    const data = getAllData();
+                    await db.collection(FIRESTORE_COLLECTION).doc('content').set(data);
+                    updateSyncStatus(true);
+                    showToast('✅ All data synced to Firestore successfully!', 'success');
+                    return true;
+                } catch (error) {
+                    console.error('Sync error:', error);
+                    showToast('❌ Failed to sync: ' + error.message, 'error');
+                    return false;
+                }
+            }
+
+            async function loadFromFirestore() {
+                try {
+                    const doc = await db.collection(FIRESTORE_COLLECTION).doc('content').get();
+                    if (doc.exists) {
+                        const data = doc.data();
+                        Object.keys(data).forEach(key => {
+                            if (DEFAULT_DATA.hasOwnProperty(key)) {
+                                localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify(data[key]));
+                            }
+                        });
+                        renderAll();
+                        updateSyncStatus(true);
+                        showToast('✅ Data loaded from Firestore successfully!', 'success');
+                    } else {
+                        // No data in Firestore, push defaults
+                        showToast('ℹ️ No data found in Firestore. Syncing defaults...', 'info');
+                        await syncToFirestore();
+                    }
+                } catch (error) {
+                    console.error('Load error:', error);
+                    showToast('❌ Failed to load from Firestore: ' + error.message, 'error');
+                }
             }
 
             // ============================================================
@@ -1020,9 +1143,10 @@
                 }
             }
 
-            // Render for standard cards (trending, popular, recent, live)
             function renderStandardCard(item, index, key) {
                 const tags = item.tags ? item.tags.map(t => t).join(', ') : '';
+                const seasonInfo = item.season ? `S${item.season}` : '';
+                const epCount = item.episodes ? item.episodes.length : 0;
                 return `
                     <div class="admin-card">
                         <div class="card-img" style="background-image:url('${item.image || ''}')">
@@ -1034,13 +1158,14 @@
                         <div class="card-body">
                             <div class="card-title">${item.title || 'Untitled'}</div>
                             <div class="card-meta">${item.ep || ''} · ${item.views || 0} views</div>
+                            ${seasonInfo ? `<div class="card-meta">Season ${item.season} · ${epCount} episodes</div>` : ''}
                             ${tags ? `<div class="card-meta" style="font-size:10px;color:var(--text-muted);">${tags}</div>` : ''}
+                            ${epCount > 0 ? `<div class="episode-badge"><i class="fas fa-play-circle"></i> ${epCount} eps</div>` : ''}
                         </div>
                     </div>
                 `;
             }
 
-            // Render for hero banners
             function renderHeroCard(item, index) {
                 return `
                     <div class="admin-card">
@@ -1058,7 +1183,6 @@
                 `;
             }
 
-            // Render for top views
             function renderTopViewCard(item, index) {
                 return `
                     <div class="admin-card">
@@ -1077,7 +1201,6 @@
                 `;
             }
 
-            // Render for comments
             function renderCommentCard(item, index) {
                 return `
                     <div class="admin-card">
@@ -1143,7 +1266,6 @@
             const modalFields = document.getElementById('modalFields');
             const modalType = document.getElementById('modalType');
             const modalIndex = document.getElementById('modalIndex');
-            const modalSubmitBtn = document.getElementById('modalSubmitBtn');
 
             const FIELD_DEFS = {
                 hero: [
@@ -1159,7 +1281,10 @@
                     { name: 'ep', label: 'Episode (e.g. 18 / 18)', type: 'text' },
                     { name: 'views', label: 'Views', type: 'number' },
                     { name: 'comments', label: 'Comments', type: 'number' },
-                    { name: 'tags', label: 'Tags (comma separated)', type: 'text', placeholder: 'Active, Movie' }
+                    { name: 'season', label: 'Season Number', type: 'number' },
+                    { name: 'tags', label: 'Tags (comma separated)', type: 'text', placeholder: 'Active, Movie' },
+                    { name: 'episodes', label: 'Episodes (JSON: [{"number":1,"title":"Ep 1","youtube":"url"}])',
+                        type: 'textarea', placeholder: '[{"number":1,"title":"Episode 1","youtube":""}]' }
                 ],
                 popular: [
                     { name: 'title', label: 'Title', type: 'text', required: true },
@@ -1167,7 +1292,10 @@
                     { name: 'ep', label: 'Episode', type: 'text' },
                     { name: 'views', label: 'Views', type: 'number' },
                     { name: 'comments', label: 'Comments', type: 'number' },
-                    { name: 'tags', label: 'Tags (comma separated)', type: 'text', placeholder: 'Active, Movie' }
+                    { name: 'season', label: 'Season Number', type: 'number' },
+                    { name: 'tags', label: 'Tags (comma separated)', type: 'text', placeholder: 'Active, Movie' },
+                    { name: 'episodes', label: 'Episodes (JSON)', type: 'textarea',
+                        placeholder: '[{"number":1,"title":"Ep 1","youtube":""}]' }
                 ],
                 recent: [
                     { name: 'title', label: 'Title', type: 'text', required: true },
@@ -1175,7 +1303,10 @@
                     { name: 'ep', label: 'Episode', type: 'text' },
                     { name: 'views', label: 'Views', type: 'number' },
                     { name: 'comments', label: 'Comments', type: 'number' },
-                    { name: 'tags', label: 'Tags (comma separated)', type: 'text', placeholder: 'Active, Movie' }
+                    { name: 'season', label: 'Season Number', type: 'number' },
+                    { name: 'tags', label: 'Tags (comma separated)', type: 'text', placeholder: 'Active, Movie' },
+                    { name: 'episodes', label: 'Episodes (JSON)', type: 'textarea',
+                        placeholder: '[{"number":1,"title":"Ep 1","youtube":""}]' }
                 ],
                 live: [
                     { name: 'title', label: 'Title', type: 'text', required: true },
@@ -1183,7 +1314,10 @@
                     { name: 'ep', label: 'Episode', type: 'text' },
                     { name: 'views', label: 'Views', type: 'number' },
                     { name: 'comments', label: 'Comments', type: 'number' },
-                    { name: 'tags', label: 'Tags (comma separated)', type: 'text', placeholder: 'Active, Movie' }
+                    { name: 'season', label: 'Season Number', type: 'number' },
+                    { name: 'tags', label: 'Tags (comma separated)', type: 'text', placeholder: 'Active, Movie' },
+                    { name: 'episodes', label: 'Episodes (JSON)', type: 'textarea',
+                        placeholder: '[{"number":1,"title":"Ep 1","youtube":""}]' }
                 ],
                 topViews: [
                     { name: 'title', label: 'Title', type: 'text', required: true },
@@ -1211,19 +1345,25 @@
                 modalIndex.value = index !== undefined ? index : -1;
 
                 const isEdit = index !== undefined && index >= 0;
-                modalTitle.innerHTML = `<i class="fas fa-${isEdit ? 'edit' : 'plus-circle'}"></i> ${isEdit ? 'Edit' : 'Add New'} ${COLLECTIONS[type]?.label || type}`;
+                modalTitle.innerHTML =
+                    `<i class="fas fa-${isEdit ? 'edit' : 'plus-circle'}"></i> ${isEdit ? 'Edit' : 'Add New'} ${COLLECTIONS[type]?.label || type}`;
 
-                // Build fields
                 let html = '';
                 defs.forEach(field => {
-                    const value = isEdit ? (item[field.name] || '') : '';
+                    let value = isEdit ? (item[field.name] !== undefined ? item[field.name] : '') : '';
+                    if (field.name === 'episodes' && typeof value === 'object') {
+                        value = JSON.stringify(value, null, 2);
+                    }
+                    if (field.name === 'tags' && Array.isArray(value)) {
+                        value = value.join(', ');
+                    }
                     const required = field.required ? 'required' : '';
                     const placeholder = field.placeholder ? `placeholder="${field.placeholder}"` : '';
                     if (field.type === 'textarea') {
                         html += `
                             <div class="form-group">
                                 <label for="field_${field.name}">${field.label}</label>
-                                <textarea id="field_${field.name}" name="${field.name}" ${required} ${placeholder}>${value}</textarea>
+                                <textarea id="field_${field.name}" name="${field.name}" ${required} ${placeholder} rows="${field.name === 'episodes' ? 4 : 3}">${value}</textarea>
                             </div>
                         `;
                     } else if (field.type === 'number') {
@@ -1250,12 +1390,10 @@
                 modalOverlay.classList.remove('active');
             };
 
-            // Close modal on backdrop click
             modalOverlay.addEventListener('click', function(e) {
                 if (e.target === modalOverlay) closeModal();
             });
 
-            // Handle modal form submit
             modalForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const type = modalType.value;
@@ -1263,7 +1401,6 @@
                 const defs = FIELD_DEFS[type];
                 if (!defs) return;
 
-                // Collect data
                 const data = getData(type);
                 const isArray = Array.isArray(data);
 
@@ -1278,12 +1415,19 @@
                         if (field.name === 'tags' && typeof value === 'string') {
                             value = value.split(',').map(s => s.trim()).filter(s => s);
                         }
+                        if (field.name === 'episodes' && typeof value === 'string') {
+                            try {
+                                value = JSON.parse(value);
+                                if (!Array.isArray(value)) value = [];
+                            } catch (e) {
+                                value = [];
+                            }
+                        }
                         formData[field.name] = value;
                     }
                 });
 
                 if (type === 'video') {
-                    // Special handling for video URL
                     setData('videoUrl', formData.url || '');
                     renderAll();
                     showToast('Video URL updated!', 'success');
@@ -1291,17 +1435,14 @@
                     return;
                 }
 
-                // For array collections
                 if (!isArray) {
                     showToast('Invalid data structure.', 'error');
                     return;
                 }
 
                 if (index >= 0 && index < data.length) {
-                    // Edit existing
                     data[index] = { ...data[index], ...formData };
                 } else {
-                    // Add new
                     data.push(formData);
                 }
 
@@ -1312,7 +1453,7 @@
             });
 
             // ============================================================
-            // AUTHENTICATION
+            // AUTHENTICATION (Hardcoded)
             // ============================================================
             const loginScreen = document.getElementById('loginScreen');
             const adminPanel = document.getElementById('adminPanel');
@@ -1323,20 +1464,22 @@
             const adminEmailDisplay = document.getElementById('adminEmailDisplay');
             const adminAvatar = document.getElementById('adminAvatar');
 
-            // Check auth state on load
-            auth.onAuthStateChanged(function(user) {
-                if (user) {
-                    // User is signed in
+            // Check session
+            function checkAuth() {
+                const session = sessionStorage.getItem('adminLoggedIn');
+                if (session === 'true') {
                     loginScreen.style.display = 'none';
                     adminPanel.style.display = 'block';
-                    adminEmailDisplay.textContent = user.email || 'admin@example.com';
-                    adminAvatar.textContent = getInitials(user.displayName || user.email || 'A');
+                    adminEmailDisplay.textContent = ADMIN_CREDENTIALS.email;
+                    adminAvatar.textContent = 'A';
                     renderAll();
+                    // Load from Firestore on login
+                    loadFromFirestore();
                 } else {
                     loginScreen.style.display = 'block';
                     adminPanel.style.display = 'none';
                 }
-            });
+            }
 
             // Login handler
             loginForm.addEventListener('submit', function(e) {
@@ -1353,32 +1496,30 @@
                 loginBtn.textContent = 'Signing in...';
                 loginError.textContent = '';
 
-                auth.signInWithEmailAndPassword(email, password)
-                    .then(function() {
-                        loginBtn.disabled = false;
-                        loginBtn.textContent = 'Sign In';
-                        showToast('Welcome back, Admin!', 'success');
-                    })
-                    .catch(function(error) {
-                        loginBtn.disabled = false;
-                        loginBtn.textContent = 'Sign In';
-                        let msg = error.message;
-                        if (error.code === 'auth/user-not-found') {
-                            msg = 'No admin account found with this email.';
-                        } else if (error.code === 'auth/wrong-password') {
-                            msg = 'Incorrect password. Please try again.';
-                        }
-                        loginError.textContent = msg;
-                    });
+                // Hardcoded check
+                if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
+                    sessionStorage.setItem('adminLoggedIn', 'true');
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = 'Sign In';
+                    showToast('Welcome back, Admin!', 'success');
+                    checkAuth();
+                } else {
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = 'Sign In';
+                    loginError.textContent = 'Invalid credentials. Use admin@streaminghub.com / 123456';
+                }
             });
 
             // Logout handler
             adminLogout.addEventListener('click', function() {
-                auth.signOut().then(function() {
-                    showToast('Logged out successfully.', 'success');
-                }).catch(function(err) {
-                    showToast('Logout error: ' + err.message, 'error');
-                });
+                sessionStorage.removeItem('adminLoggedIn');
+                showToast('Logged out successfully.', 'success');
+                checkAuth();
+            });
+
+            // Sync to Firestore
+            document.getElementById('syncToFirestoreBtn').addEventListener('click', function() {
+                syncToFirestore();
             });
 
             // ============================================================
@@ -1387,6 +1528,10 @@
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     closeModal();
+                }
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    syncToFirestore();
                 }
             });
 
@@ -1401,9 +1546,14 @@
                 }
             });
 
+            // Check auth on load
+            checkAuth();
+
             console.log('🛠️ StreamingHub Admin Panel loaded.');
             console.log('📦 Data stored in localStorage with prefix:', STORAGE_PREFIX);
-            console.log('🔑 To reset data, clear localStorage for this site.');
+            console.log('🔑 Default credentials: admin@streaminghub.com / 123456');
+            console.log('☁️ Firestore collection:', FIRESTORE_COLLECTION);
+            console.log('💡 Press Ctrl+S to sync to Firestore');
 
         })();
     </script>
