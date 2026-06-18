@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StreamingHub | Admin Panel</title>
+    <title>StreamingHub | Advanced Admin Panel</title>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -20,8 +20,8 @@
 
     <style>
         /* ============================================================
-                   ROOT & RESET
-                   ============================================================ */
+           ROOT & RESET
+           ============================================================ */
         :root {
             --bg-primary: #0b0c2a;
             --bg-secondary: #13153a;
@@ -33,6 +33,8 @@
             --accent: #e74c3c;
             --accent-hover: #c0392b;
             --accent-glow: rgba(231, 76, 60, 0.25);
+            --success: #2ecc71;
+            --success-glow: rgba(46, 204, 113, 0.25);
             --border-color: rgba(255, 255, 255, 0.06);
             --radius: 12px;
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
@@ -57,8 +59,8 @@
         }
 
         /* ============================================================
-                   LOGIN SCREEN
-                   ============================================================ */
+           LOGIN SCREEN
+           ============================================================ */
         #loginScreen {
             width: 100%;
             max-width: 420px;
@@ -172,8 +174,8 @@
         }
 
         /* ============================================================
-                   ADMIN DASHBOARD
-                   ============================================================ */
+           ADMIN DASHBOARD
+           ============================================================ */
         #adminPanel {
             display: none;
             width: 100%;
@@ -217,6 +219,7 @@
             display: flex;
             align-items: center;
             gap: 16px;
+            flex-wrap: wrap;
         }
 
         .admin-header .user-info .avatar {
@@ -235,6 +238,58 @@
         .admin-header .user-info .email {
             color: var(--text-secondary);
             font-size: 14px;
+        }
+
+        .admin-header .user-info .sync-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .admin-header .user-info .sync-status .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .admin-header .user-info .sync-status .dot.synced {
+            background: var(--success);
+        }
+        .admin-header .user-info .sync-status .dot.unsynced {
+            background: #f39c12;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .admin-header .user-info .btn-sync {
+            background: rgba(46, 204, 113, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(46, 204, 113, 0.2);
+            padding: 6px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: var(--transition);
+        }
+
+        .admin-header .user-info .btn-sync:hover {
+            background: var(--success);
+            color: #fff;
         }
 
         .admin-header .user-info .logout-btn {
@@ -306,6 +361,12 @@
             color: var(--text-secondary);
         }
 
+        .section-header .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
         /* ---- Buttons ---- */
         .btn-add {
             background: var(--accent);
@@ -333,6 +394,27 @@
             font-size: 12px;
         }
 
+        .btn-success {
+            background: var(--success);
+            color: #fff;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-success:hover {
+            background: #27ae60;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px var(--success-glow);
+        }
+
         .btn-danger {
             background: rgba(231, 76, 60, 0.15);
             color: var(--accent);
@@ -346,22 +428,6 @@
 
         .btn-danger:hover {
             background: var(--accent);
-            color: #fff;
-        }
-
-        .btn-sync {
-            background: rgba(46, 204, 113, 0.15);
-            color: #2ecc71;
-            border: 1px solid rgba(46, 204, 113, 0.2);
-            padding: 4px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: var(--transition);
-        }
-
-        .btn-sync:hover {
-            background: #2ecc71;
             color: #fff;
         }
 
@@ -451,8 +517,8 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
             z-index: 1000;
             align-items: center;
             justify-content: center;
@@ -467,12 +533,21 @@
             background: var(--bg-secondary);
             border-radius: var(--radius);
             padding: 32px;
-            max-width: 580px;
+            max-width: 700px;
             width: 100%;
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
             max-height: 90vh;
             overflow-y: auto;
+        }
+
+        .modal-box::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .modal-box::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
         }
 
         .modal-box h3 {
@@ -496,6 +571,10 @@
             font-weight: 500;
             color: var(--text-secondary);
             margin-bottom: 4px;
+        }
+
+        .modal-box .form-group label .required {
+            color: var(--accent);
         }
 
         .modal-box .form-group input,
@@ -533,6 +612,91 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
+        }
+
+        .modal-box .form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .modal-box .episode-entry {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .modal-box .episode-entry .remove-ep {
+            position: absolute;
+            top: 6px;
+            right: 8px;
+            background: none;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .modal-box .episode-entry .remove-ep:hover {
+            background: rgba(231, 76, 60, 0.15);
+        }
+
+        .modal-box .episode-entry .ep-fields {
+            display: grid;
+            grid-template-columns: 60px 1fr 1fr;
+            gap: 10px;
+        }
+
+        .modal-box .episode-entry .ep-fields input {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px 10px;
+            color: var(--text-primary);
+            font-size: 13px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .modal-box .episode-entry .ep-fields input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .modal-box .episode-entry .ep-fields input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .modal-box .add-episode-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed var(--border-color);
+            color: var(--text-secondary);
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 13px;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .modal-box .add-episode-btn:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+            background: rgba(231, 76, 60, 0.05);
+        }
+
+        .modal-box .episode-counter {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: block;
         }
 
         .modal-box .modal-actions {
@@ -594,7 +758,7 @@
         }
 
         .toast.success {
-            border-left-color: #2ecc71;
+            border-left-color: var(--success);
         }
 
         .toast.error {
@@ -616,47 +780,9 @@
             }
         }
 
-        /* ---- Video URL display ---- */
-        .video-url-display {
-            background: var(--bg-input);
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-size: 13px;
-            color: var(--text-secondary);
-            word-break: break-all;
-            border: 1px solid var(--border-color);
-            margin-top: 6px;
-        }
-
-        /* ---- Sync status ---- */
-        .sync-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .sync-status .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .sync-status .dot.synced {
-            background: #2ecc71;
-        }
-        .sync-status .dot.unsynced {
-            background: #f39c12;
-        }
-        .sync-status .dot.error {
-            background: var(--accent);
-        }
-
         /* ============================================================
-                   RESPONSIVE
-                   ============================================================ */
+           RESPONSIVE
+           ============================================================ */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -692,8 +818,14 @@
                 margin: 10px;
             }
 
-            .modal-box .form-row {
+            .modal-box .form-row,
+            .modal-box .form-row-3 {
                 grid-template-columns: 1fr;
+            }
+
+            .modal-box .episode-entry .ep-fields {
+                grid-template-columns: 1fr;
+                gap: 6px;
             }
 
             .section-header {
@@ -724,6 +856,10 @@
             .admin-header .brand h2 {
                 font-size: 18px;
             }
+
+            .admin-header .user-info .email {
+                font-size: 12px;
+            }
         }
     </style>
 </head>
@@ -736,7 +872,7 @@
     <div id="loginScreen">
         <div class="logo">
             <h1>Streaming<span>Hub</span></h1>
-            <p>Admin Panel — Secure Access</p>
+            <p>Advanced Admin Panel</p>
         </div>
 
         <form id="loginForm" autocomplete="off">
@@ -763,7 +899,7 @@
         <!-- Header -->
         <div class="admin-header">
             <div class="brand">
-                <h2>Streaming<span>Hub</span> <small>Admin</small></h2>
+                <h2>Streaming<span>Hub</span> <small>Advanced Admin</small></h2>
             </div>
             <div class="user-info">
                 <div class="avatar" id="adminAvatar">A</div>
@@ -783,26 +919,19 @@
             <!-- ====== BANNER / HERO ====== -->
             <div class="section-header">
                 <h3><i class="fas fa-images"></i> Hero Banners</h3>
-                <div>
+                <div class="actions">
                     <span class="badge-count" id="heroCount">0 slides</span>
                     <button class="btn-add btn-add-sm" onclick="openModal('hero')"><i class="fas fa-plus"></i> Add</button>
-                    <button class="btn-add btn-add-sm" onclick="loadFromFirestore()" style="background:#2ecc71;"><i class="fas fa-cloud-download-alt"></i> Load</button>
+                    <button class="btn-success btn-add-sm" onclick="loadFromFirestore()"><i class="fas fa-cloud-download-alt"></i> Load</button>
                 </div>
             </div>
             <div class="cards-grid" id="heroGrid"></div>
-
-            <!-- ====== VIDEO URL ====== -->
-            <div class="section-header">
-                <h3><i class="fas fa-play-circle"></i> Featured Video</h3>
-                <button class="btn-add btn-add-sm" onclick="openModal('video')"><i class="fas fa-edit"></i> Change URL</button>
-            </div>
-            <div class="video-url-display" id="videoUrlDisplay">https://www.youtube.com/embed/...</div>
 
             <!-- ====== ANIME COLLECTIONS ====== -->
             <!-- TRENDING -->
             <div class="section-header">
                 <h3><i class="fas fa-fire"></i> Trending Now</h3>
-                <div>
+                <div class="actions">
                     <span class="badge-count" id="trendingCount">0 items</span>
                     <button class="btn-add btn-add-sm" onclick="openModal('trending')"><i class="fas fa-plus"></i> Add</button>
                 </div>
@@ -812,7 +941,7 @@
             <!-- POPULAR -->
             <div class="section-header">
                 <h3><i class="fas fa-star"></i> Popular Shows</h3>
-                <div>
+                <div class="actions">
                     <span class="badge-count" id="popularCount">0 items</span>
                     <button class="btn-add btn-add-sm" onclick="openModal('popular')"><i class="fas fa-plus"></i> Add</button>
                 </div>
@@ -822,7 +951,7 @@
             <!-- RECENTLY ADDED -->
             <div class="section-header">
                 <h3><i class="fas fa-clock"></i> Recently Added</h3>
-                <div>
+                <div class="actions">
                     <span class="badge-count" id="recentCount">0 items</span>
                     <button class="btn-add btn-add-sm" onclick="openModal('recent')"><i class="fas fa-plus"></i> Add</button>
                 </div>
@@ -832,7 +961,7 @@
             <!-- LIVE ACTION -->
             <div class="section-header">
                 <h3><i class="fas fa-video"></i> Live Action</h3>
-                <div>
+                <div class="actions">
                     <span class="badge-count" id="liveCount">0 items</span>
                     <button class="btn-add btn-add-sm" onclick="openModal('live')"><i class="fas fa-plus"></i> Add</button>
                 </div>
@@ -842,7 +971,7 @@
             <!-- TOP VIEWS -->
             <div class="section-header">
                 <h3><i class="fas fa-chart-simple"></i> Top Views (Sidebar)</h3>
-                <div>
+                <div class="actions">
                     <span class="badge-count" id="topViewsCount">0 items</span>
                     <button class="btn-add btn-add-sm" onclick="openModal('topViews')"><i class="fas fa-plus"></i> Add</button>
                 </div>
@@ -852,7 +981,7 @@
             <!-- COMMENTS -->
             <div class="section-header">
                 <h3><i class="fas fa-comment"></i> Latest Comments</h3>
-                <div>
+                <div class="actions">
                     <span class="badge-count" id="commentsCount">0 items</span>
                     <button class="btn-add btn-add-sm" onclick="openModal('comments')"><i class="fas fa-plus"></i> Add</button>
                 </div>
@@ -926,9 +1055,6 @@
             // ============================================================
             const STORAGE_PREFIX = 'streaminghub_';
             let isSynced = false;
-            let syncError = false;
-
-            // Firestore collection name
             const FIRESTORE_COLLECTION = 'websiteData';
 
             const COLLECTIONS = {
@@ -938,11 +1064,9 @@
                 recent: { label: 'Recent', default: [] },
                 live: { label: 'Live Action', default: [] },
                 topViews: { label: 'Top Views', default: [] },
-                comments: { label: 'Comments', default: [] },
-                videoUrl: { label: 'Video URL', default: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }
+                comments: { label: 'Comments', default: [] }
             };
 
-            // Default data for first-time use
             const DEFAULT_DATA = {
                 hero: [
                     { title: 'Fate / Stay Night: Unlimited Blade Works', label: 'Adventure',
@@ -1016,8 +1140,7 @@
                     { user: 'OtakuKing', text: 'Best anime of the season hands down.', time: '5 hours ago' },
                     { user: 'WeebMaster', text: 'Can\'t wait for the next season!', time: '1 day ago' },
                     { user: 'SakuraLover', text: 'The animation quality is insane.', time: '2 days ago' }
-                ],
-                videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+                ]
             };
 
             // ============================================================
@@ -1113,7 +1236,6 @@
                         updateSyncStatus(true);
                         showToast('✅ Data loaded from Firestore successfully!', 'success');
                     } else {
-                        // No data in Firestore, push defaults
                         showToast('ℹ️ No data found in Firestore. Syncing defaults...', 'info');
                         await syncToFirestore();
                     }
@@ -1147,6 +1269,7 @@
                 const tags = item.tags ? item.tags.map(t => t).join(', ') : '';
                 const seasonInfo = item.season ? `S${item.season}` : '';
                 const epCount = item.episodes ? item.episodes.length : 0;
+                const hasVideo = item.episodes ? item.episodes.some(ep => ep.youtube && ep.youtube.trim() !== '') : false;
                 return `
                     <div class="admin-card">
                         <div class="card-img" style="background-image:url('${item.image || ''}')">
@@ -1154,6 +1277,7 @@
                                 <button onclick="editItem('${key}', ${index})" title="Edit"><i class="fas fa-pen"></i></button>
                                 <button onclick="deleteItem('${key}', ${index})" title="Delete"><i class="fas fa-trash"></i></button>
                             </div>
+                            ${hasVideo ? '<span style="position:absolute;bottom:6px;left:6px;background:rgba(46,204,113,0.8);padding:2px 8px;border-radius:4px;font-size:10px;"><i class="fas fa-play"></i> Ready</span>' : ''}
                         </div>
                         <div class="card-body">
                             <div class="card-title">${item.title || 'Untitled'}</div>
@@ -1217,14 +1341,6 @@
                 `;
             }
 
-            function renderVideoUrl() {
-                const url = getData('videoUrl');
-                const display = document.getElementById('videoUrlDisplay');
-                if (display) {
-                    display.textContent = url || 'No video set.';
-                }
-            }
-
             function renderAll() {
                 renderCollection('hero', 'heroGrid', 'heroCount', renderHeroCard);
                 renderCollection('trending', 'trendingGrid', 'trendingCount', renderStandardCard);
@@ -1233,7 +1349,6 @@
                 renderCollection('live', 'liveGrid', 'liveCount', renderStandardCard);
                 renderCollection('topViews', 'topViewsGrid', 'topViewsCount', renderTopViewCard);
                 renderCollection('comments', 'commentsGrid', 'commentsCount', renderCommentCard);
-                renderVideoUrl();
             }
 
             // ============================================================
@@ -1256,6 +1371,49 @@
                 if (!item) return;
                 openModal(key, index, item);
             };
+
+            // ============================================================
+            // EPISODE HELPER FUNCTIONS
+            // ============================================================
+            let episodeCounter = 0;
+
+            function addEpisodeEntry(container, number, title, youtube) {
+                const div = document.createElement('div');
+                div.className = 'episode-entry';
+                div.dataset.index = episodeCounter++;
+                div.innerHTML = `
+                    <button type="button" class="remove-ep" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+                    <div class="ep-fields">
+                        <input type="number" class="ep-number" placeholder="No." value="${number || ''}" min="1">
+                        <input type="text" class="ep-title" placeholder="Episode Title" value="${title || ''}">
+                        <input type="url" class="ep-youtube" placeholder="YouTube URL" value="${youtube || ''}">
+                    </div>
+                `;
+                container.appendChild(div);
+            }
+
+            function getEpisodesFromForm(container) {
+                const entries = container.querySelectorAll('.episode-entry');
+                const episodes = [];
+                entries.forEach(entry => {
+                    const number = parseInt(entry.querySelector('.ep-number').value) || 0;
+                    const title = entry.querySelector('.ep-title').value.trim() || `Episode ${number}`;
+                    const youtube = entry.querySelector('.ep-youtube').value.trim();
+                    if (number > 0 || youtube) {
+                        episodes.push({ number, title, youtube });
+                    }
+                });
+                return episodes;
+            }
+
+            function loadEpisodesIntoForm(container, episodes) {
+                container.innerHTML = '';
+                if (episodes && episodes.length > 0) {
+                    episodes.forEach(ep => {
+                        addEpisodeEntry(container, ep.number || 0, ep.title || '', ep.youtube || '');
+                    });
+                }
+            }
 
             // ============================================================
             // MODAL LOGIC
@@ -1283,8 +1441,7 @@
                     { name: 'comments', label: 'Comments', type: 'number' },
                     { name: 'season', label: 'Season Number', type: 'number' },
                     { name: 'tags', label: 'Tags (comma separated)', type: 'text', placeholder: 'Active, Movie' },
-                    { name: 'episodes', label: 'Episodes (JSON: [{"number":1,"title":"Ep 1","youtube":"url"}])',
-                        type: 'textarea', placeholder: '[{"number":1,"title":"Episode 1","youtube":""}]' }
+                    { name: 'episodes', label: 'Episodes', type: 'episodes' }
                 ],
                 popular: [
                     { name: 'title', label: 'Title', type: 'text', required: true },
@@ -1294,8 +1451,7 @@
                     { name: 'comments', label: 'Comments', type: 'number' },
                     { name: 'season', label: 'Season Number', type: 'number' },
                     { name: 'tags', label: 'Tags (comma separated)', type: 'text', placeholder: 'Active, Movie' },
-                    { name: 'episodes', label: 'Episodes (JSON)', type: 'textarea',
-                        placeholder: '[{"number":1,"title":"Ep 1","youtube":""}]' }
+                    { name: 'episodes', label: 'Episodes', type: 'episodes' }
                 ],
                 recent: [
                     { name: 'title', label: 'Title', type: 'text', required: true },
@@ -1305,8 +1461,7 @@
                     { name: 'comments', label: 'Comments', type: 'number' },
                     { name: 'season', label: 'Season Number', type: 'number' },
                     { name: 'tags', label: 'Tags (comma separated)', type: 'text', placeholder: 'Active, Movie' },
-                    { name: 'episodes', label: 'Episodes (JSON)', type: 'textarea',
-                        placeholder: '[{"number":1,"title":"Ep 1","youtube":""}]' }
+                    { name: 'episodes', label: 'Episodes', type: 'episodes' }
                 ],
                 live: [
                     { name: 'title', label: 'Title', type: 'text', required: true },
@@ -1316,8 +1471,7 @@
                     { name: 'comments', label: 'Comments', type: 'number' },
                     { name: 'season', label: 'Season Number', type: 'number' },
                     { name: 'tags', label: 'Tags (comma separated)', type: 'text', placeholder: 'Active, Movie' },
-                    { name: 'episodes', label: 'Episodes (JSON)', type: 'textarea',
-                        placeholder: '[{"number":1,"title":"Ep 1","youtube":""}]' }
+                    { name: 'episodes', label: 'Episodes', type: 'episodes' }
                 ],
                 topViews: [
                     { name: 'title', label: 'Title', type: 'text', required: true },
@@ -1330,10 +1484,6 @@
                     { name: 'user', label: 'Username', type: 'text', required: true },
                     { name: 'text', label: 'Comment Text', type: 'textarea', required: true },
                     { name: 'time', label: 'Time (e.g. 2 hours ago)', type: 'text' }
-                ],
-                video: [
-                    { name: 'url', label: 'YouTube Embed URL', type: 'text', required: true,
-                        placeholder: 'https://www.youtube.com/embed/VIDEO_ID' }
                 ]
             };
 
@@ -1349,45 +1499,82 @@
                     `<i class="fas fa-${isEdit ? 'edit' : 'plus-circle'}"></i> ${isEdit ? 'Edit' : 'Add New'} ${COLLECTIONS[type]?.label || type}`;
 
                 let html = '';
+                let episodesContainer = null;
+
                 defs.forEach(field => {
                     let value = isEdit ? (item[field.name] !== undefined ? item[field.name] : '') : '';
-                    if (field.name === 'episodes' && typeof value === 'object') {
-                        value = JSON.stringify(value, null, 2);
-                    }
                     if (field.name === 'tags' && Array.isArray(value)) {
                         value = value.join(', ');
                     }
-                    const required = field.required ? 'required' : '';
+                    const required = field.required ? '<span class="required">*</span>' : '';
                     const placeholder = field.placeholder ? `placeholder="${field.placeholder}"` : '';
-                    if (field.type === 'textarea') {
+
+                    if (field.type === 'episodes') {
                         html += `
                             <div class="form-group">
-                                <label for="field_${field.name}">${field.label}</label>
-                                <textarea id="field_${field.name}" name="${field.name}" ${required} ${placeholder} rows="${field.name === 'episodes' ? 4 : 3}">${value}</textarea>
+                                <label>${field.label} ${required}</label>
+                                <div id="episodesContainer">
+                                    <!-- Episode entries will be rendered here -->
+                                </div>
+                                <button type="button" class="add-episode-btn" id="addEpisodeBtn">
+                                    <i class="fas fa-plus"></i> Add Episode
+                                </button>
+                            </div>
+                        `;
+                        // We'll handle episodes after rendering
+                    } else if (field.type === 'textarea') {
+                        html += `
+                            <div class="form-group">
+                                <label for="field_${field.name}">${field.label} ${required}</label>
+                                <textarea id="field_${field.name}" name="${field.name}" ${placeholder} rows="3">${value}</textarea>
                             </div>
                         `;
                     } else if (field.type === 'number') {
                         html += `
                             <div class="form-group">
-                                <label for="field_${field.name}">${field.label}</label>
-                                <input type="number" id="field_${field.name}" name="${field.name}" value="${value}" ${required} ${placeholder}>
+                                <label for="field_${field.name}">${field.label} ${required}</label>
+                                <input type="number" id="field_${field.name}" name="${field.name}" value="${value}" ${placeholder}>
                             </div>
                         `;
                     } else {
                         html += `
                             <div class="form-group">
-                                <label for="field_${field.name}">${field.label}</label>
-                                <input type="${field.type}" id="field_${field.name}" name="${field.name}" value="${value}" ${required} ${placeholder}>
+                                <label for="field_${field.name}">${field.label} ${required}</label>
+                                <input type="${field.type}" id="field_${field.name}" name="${field.name}" value="${value}" ${placeholder}>
                             </div>
                         `;
                     }
                 });
+
                 modalFields.innerHTML = html;
+
+                // Handle episodes if present
+                if (type !== 'hero' && type !== 'topViews' && type !== 'comments') {
+                    const container = document.getElementById('episodesContainer');
+                    if (container) {
+                        if (isEdit && item.episodes) {
+                            loadEpisodesIntoForm(container, item.episodes);
+                        } else {
+                            // Add one empty episode by default
+                            addEpisodeEntry(container, 1, 'Episode 1', '');
+                        }
+                        // Add episode button
+                        const addBtn = document.getElementById('addEpisodeBtn');
+                        if (addBtn) {
+                            addBtn.addEventListener('click', function() {
+                                const nextNum = container.querySelectorAll('.episode-entry').length + 1;
+                                addEpisodeEntry(container, nextNum, `Episode ${nextNum}`, '');
+                            });
+                        }
+                    }
+                }
+
                 modalOverlay.classList.add('active');
             };
 
             window.closeModal = function() {
                 modalOverlay.classList.remove('active');
+                episodeCounter = 0;
             };
 
             modalOverlay.addEventListener('click', function(e) {
@@ -1406,6 +1593,13 @@
 
                 const formData = {};
                 defs.forEach(field => {
+                    if (field.type === 'episodes') {
+                        const container = document.getElementById('episodesContainer');
+                        if (container) {
+                            formData[field.name] = getEpisodesFromForm(container);
+                        }
+                        return;
+                    }
                     const el = document.getElementById('field_' + field.name);
                     if (el) {
                         let value = el.value.trim();
@@ -1415,25 +1609,9 @@
                         if (field.name === 'tags' && typeof value === 'string') {
                             value = value.split(',').map(s => s.trim()).filter(s => s);
                         }
-                        if (field.name === 'episodes' && typeof value === 'string') {
-                            try {
-                                value = JSON.parse(value);
-                                if (!Array.isArray(value)) value = [];
-                            } catch (e) {
-                                value = [];
-                            }
-                        }
                         formData[field.name] = value;
                     }
                 });
-
-                if (type === 'video') {
-                    setData('videoUrl', formData.url || '');
-                    renderAll();
-                    showToast('Video URL updated!', 'success');
-                    closeModal();
-                    return;
-                }
 
                 if (!isArray) {
                     showToast('Invalid data structure.', 'error');
@@ -1453,7 +1631,7 @@
             });
 
             // ============================================================
-            // AUTHENTICATION (Hardcoded)
+            // AUTHENTICATION
             // ============================================================
             const loginScreen = document.getElementById('loginScreen');
             const adminPanel = document.getElementById('adminPanel');
@@ -1464,7 +1642,6 @@
             const adminEmailDisplay = document.getElementById('adminEmailDisplay');
             const adminAvatar = document.getElementById('adminAvatar');
 
-            // Check session
             function checkAuth() {
                 const session = sessionStorage.getItem('adminLoggedIn');
                 if (session === 'true') {
@@ -1473,7 +1650,6 @@
                     adminEmailDisplay.textContent = ADMIN_CREDENTIALS.email;
                     adminAvatar.textContent = 'A';
                     renderAll();
-                    // Load from Firestore on login
                     loadFromFirestore();
                 } else {
                     loginScreen.style.display = 'block';
@@ -1481,7 +1657,6 @@
                 }
             }
 
-            // Login handler
             loginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const email = document.getElementById('adminEmail').value.trim();
@@ -1496,7 +1671,6 @@
                 loginBtn.textContent = 'Signing in...';
                 loginError.textContent = '';
 
-                // Hardcoded check
                 if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
                     sessionStorage.setItem('adminLoggedIn', 'true');
                     loginBtn.disabled = false;
@@ -1510,14 +1684,12 @@
                 }
             });
 
-            // Logout handler
             adminLogout.addEventListener('click', function() {
                 sessionStorage.removeItem('adminLoggedIn');
                 showToast('Logged out successfully.', 'success');
                 checkAuth();
             });
 
-            // Sync to Firestore
             document.getElementById('syncToFirestoreBtn').addEventListener('click', function() {
                 syncToFirestore();
             });
@@ -1530,15 +1702,19 @@
                     closeModal();
                 }
                 if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-                    e.preventDefault();
-                    syncToFirestore();
+                    if (document.getElementById('modalOverlay').classList.contains('active')) {
+                        e.preventDefault();
+                        modalForm.dispatchEvent(new Event('submit'));
+                    } else {
+                        e.preventDefault();
+                        syncToFirestore();
+                    }
                 }
             });
 
             // ============================================================
             // INIT
             // ============================================================
-            // Pre-populate defaults if empty
             Object.keys(DEFAULT_DATA).forEach(key => {
                 const existing = localStorage.getItem(STORAGE_PREFIX + key);
                 if (existing === null) {
@@ -1546,14 +1722,14 @@
                 }
             });
 
-            // Check auth on load
             checkAuth();
 
-            console.log('🛠️ StreamingHub Admin Panel loaded.');
+            console.log('🛠️ StreamingHub Advanced Admin Panel loaded.');
             console.log('📦 Data stored in localStorage with prefix:', STORAGE_PREFIX);
             console.log('🔑 Default credentials: admin@streaminghub.com / 123456');
             console.log('☁️ Firestore collection:', FIRESTORE_COLLECTION);
             console.log('💡 Press Ctrl+S to sync to Firestore');
+            console.log('📺 Add episodes with YouTube links easily using the form!');
 
         })();
     </script>
