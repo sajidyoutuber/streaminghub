@@ -26,6 +26,8 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js">
+    </script>
 
     <style>
         /* ========== ROOT VARIABLES ========== */
@@ -43,22 +45,26 @@
         * {
             box-sizing: border-box;
         }
+
         body {
             background: var(--bg-dark);
             color: var(--text-light);
             font-family: 'Mulish', sans-serif;
             overflow-x: hidden;
         }
+
         img {
             max-width: 100%;
             height: auto;
             display: block;
         }
+
         a {
             color: var(--text-light);
             transition: var(--transition);
             text-decoration: none;
         }
+
         a:hover {
             color: var(--primary);
         }
@@ -161,7 +167,6 @@
             background: var(--primary-dark);
             color: #fff;
         }
-        /* Mobile nav adjustments */
         .slicknav_menu {
             background: transparent !important;
         }
@@ -424,7 +429,7 @@
             color: #fff;
         }
 
-        /* ========== YOUTUBE EMBED PLAYER ========== */
+        /* ========== VIDEO PLAYER WITH EPISODE SELECTOR ========== */
         .video-player-section {
             padding: 20px 0 40px;
         }
@@ -446,6 +451,123 @@
             border: none;
         }
 
+        /* Episode Selector */
+        .episode-selector {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .episode-selector .selector-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .episode-selector .selector-header h5 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+        .episode-selector .selector-header h5 i {
+            color: var(--primary);
+            margin-right: 8px;
+        }
+        .episode-selector .controls-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .episode-selector select {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Mulish', sans-serif;
+            cursor: pointer;
+            outline: none;
+            min-width: 120px;
+            transition: var(--transition);
+        }
+        .episode-selector select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+        }
+        .episode-selector select option {
+            background: var(--bg-dark);
+            color: var(--text-light);
+        }
+        .episode-selector .episode-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            max-height: 120px;
+            overflow-y: auto;
+            padding: 4px 2px;
+        }
+        .episode-selector .episode-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .episode-selector .episode-list::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        .episode-selector .episode-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-light);
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Mulish', sans-serif;
+            white-space: nowrap;
+        }
+        .episode-selector .episode-btn:hover {
+            background: rgba(231, 76, 60, 0.15);
+            border-color: var(--primary);
+        }
+        .episode-selector .episode-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+        .episode-selector .episode-btn.has-video {
+            border-color: rgba(46, 204, 113, 0.3);
+        }
+        .episode-selector .episode-btn.has-video::after {
+            content: ' ▶';
+            font-size: 10px;
+            color: #2ecc71;
+        }
+        .episode-selector .episode-btn.no-video {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .episode-selector .no-episodes {
+            color: var(--text-muted);
+            font-size: 14px;
+            padding: 10px 0;
+        }
+        .episode-selector .current-episode-info {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .episode-selector .current-episode-info strong {
+            color: var(--text-light);
+        }
+
         /* ========== RESPONSIVE TWEAKS ========== */
         @media (max-width: 991px) {
             .user-menu .user-email {
@@ -463,6 +585,13 @@
             }
             .product__item__pic {
                 height: 180px;
+            }
+            .episode-selector .controls-group {
+                width: 100%;
+            }
+            .episode-selector select {
+                flex: 1;
+                min-width: 100px;
             }
         }
         @media (max-width: 767px) {
@@ -495,6 +624,16 @@
             .section-title h4 {
                 font-size: 18px;
             }
+            .episode-selector {
+                padding: 16px;
+            }
+            .episode-selector .selector-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .episode-selector .episode-list {
+                max-height: 80px;
+            }
         }
         @media (max-width: 480px) {
             .hero__items {
@@ -512,6 +651,10 @@
             }
             .product__item__text h5 {
                 font-size: 14px;
+            }
+            .episode-selector .episode-btn {
+                padding: 4px 10px;
+                font-size: 12px;
             }
         }
 
@@ -586,16 +729,16 @@
         </div>
     </header>
 
-    <!-- ====== HERO / BANNER SECTION (Editable via Admin) ====== -->
+    <!-- ====== HERO / BANNER SECTION ====== -->
     <section class="hero" id="heroSection">
         <div class="container">
             <div class="hero__slider owl-carousel" id="heroSlider">
-                <!-- Slides will be injected by JS (or static fallback) -->
+                <!-- Slides injected by JS -->
             </div>
         </div>
     </section>
 
-    <!-- ====== YOUTUBE EMBED PLAYER (Editable via Admin) ====== -->
+    <!-- ====== VIDEO PLAYER WITH EPISODE SELECTOR ====== -->
     <section class="video-player-section" id="videoPlayerSection">
         <div class="container">
             <div class="row">
@@ -604,7 +747,6 @@
                         <h4>Featured Video</h4>
                     </div>
                     <div class="video-wrapper" id="videoWrapper">
-                        <!-- Default fallback video; admin can update via localStorage -->
                         <iframe id="featuredVideo"
                             src="https://www.youtube.com/embed/dQw4w9WgXcQ"
                             title="Featured Video"
@@ -612,12 +754,31 @@
                             allowfullscreen>
                         </iframe>
                     </div>
+
+                    <!-- ====== EPISODE SELECTOR ====== -->
+                    <div class="episode-selector" id="episodeSelector">
+                        <div class="selector-header">
+                            <h5><i class="fas fa-play-circle"></i> <span id="episodeSelectorTitle">Episodes</span></h5>
+                            <div class="controls-group">
+                                <select id="seasonSelect">
+                                    <option value="">Loading seasons...</option>
+                                </select>
+                                <span style="color:var(--text-muted);font-size:13px;" id="episodeCount">0 episodes</span>
+                            </div>
+                        </div>
+                        <div class="episode-list" id="episodeList">
+                            <div class="no-episodes">Select a season to view episodes</div>
+                        </div>
+                        <div class="current-episode-info" id="currentEpisodeInfo">
+                            <strong>Now Playing:</strong> <span id="currentEpisodeName">Featured Video</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ====== TRENDING NOW (Editable via Admin) ====== -->
+    <!-- ====== TRENDING NOW ====== -->
     <section class="product spad" id="trendingSection">
         <div class="container">
             <div class="row">
@@ -680,12 +841,11 @@
         </div>
     </section>
 
-    <!-- ====== SIDEBAR + TOP VIEWS (Editable via Admin) ====== -->
+    <!-- ====== SIDEBAR + TOP VIEWS ====== -->
     <section class="product spad" id="sidebarSection">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8">
-                    <!-- Live Action (placeholder, dynamic) -->
                     <div class="live__product">
                         <div class="row">
                             <div class="col-lg-8 col-md-7 col-sm-6">
@@ -757,7 +917,9 @@
                 </div>
                 <div class="col-lg-3 col-md-4 text-md-end text-center">
                     <p class="mb-0" style="font-size:13px; color:var(--text-muted);">
-                        &copy; <script>document.write(new Date().getFullYear());</script> Made with <i class="fa fa-heart" style="color:var(--primary);"></i> by <a href="https://t.me/aura_sajid" target="_blank" style="color:var(--primary);">SAJID</a>
+                        &copy; <script>
+                            document.write(new Date().getFullYear());
+                        </script> Made with <i class="fa fa-heart" style="color:var(--primary);"></i> by <a href="https://t.me/aura_sajid" target="_blank" style="color:var(--primary);">SAJID</a>
                     </p>
                 </div>
             </div>
@@ -804,11 +966,13 @@
 
             firebase.initializeApp(firebaseConfig);
             const auth = firebase.auth();
+            const db = firebase.firestore();
+
             auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
                 .catch(err => console.warn('Persistence error:', err));
 
             // ==========================================
-            // DEFAULT DATA (fallback if admin not set)
+            // DEFAULT DATA
             // ==========================================
             const DEFAULT_DATA = {
                 hero: [
@@ -817,52 +981,54 @@
                         link: '#' },
                     { title: 'Attack on Titan Final Season', label: 'Action',
                         desc: 'The epic conclusion to the hit series.', image: 'img/hero/hero-2.jpg',
-                    link: '#' },
+                        link: '#' },
                     { title: 'Demon Slayer: Mugen Train', label: 'Movie',
                         desc: 'The highest-grossing anime film of all time.', image: 'img/hero/hero-3.jpg',
-                    link: '#' }
+                        link: '#' }
                 ],
                 trending: [
                     { title: 'The Seven Deadly Sins: Wrath of the Gods', image: 'img/trending/trend-1.jpg',
-                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'] },
+                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] },
                     { title: 'Gintama Movie 2: Kanketsu-hen', image: 'img/trending/trend-2.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Shingeki no Kyojin Season 3 Part 2', image: 'img/trending/trend-3.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Fullmetal Alchemist: Brotherhood', image: 'img/trending/trend-4.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Shiratorizawa Gakuen Koukou', image: 'img/trending/trend-5.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Code Geass: Hangyaku no Lelouch R2', image: 'img/trending/trend-6.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] }
+                        views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] },
+                    { title: 'Shingeki no Kyojin Season 3 Part 2', image: 'img/trending/trend-3.jpg',
+                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 3,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] }
                 ],
                 popular: [
                     { title: 'Sen to Chihiro no Kamikakushi', image: 'img/popular/popular-1.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Kizumonogatari III: Reiket su-hen', image: 'img/popular/popular-2.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Shirogane Tamashii hen Kouhan sen', image: 'img/popular/popular-3.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Rurouni Kenshin: Meiji Kenkaku', image: 'img/popular/popular-4.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Mushishi Zoku Shou 2nd Season', image: 'img/popular/popular-5.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Monogatari Series: Second Season', image: 'img/popular/popular-6.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] }
+                        views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] },
+                    { title: 'Kizumonogatari III: Reiket su-hen', image: 'img/popular/popular-2.jpg',
+                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] },
+                    { title: 'Shirogane Tamashii hen Kouhan sen', image: 'img/popular/popular-3.jpg',
+                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] }
                 ],
                 recent: [
-                    { title: 'Great Teacher Onizuka', image: 'img/recent/recent-1.jpg', ep: '18 / 18', views: 9141,
-                        comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Fate/stay night: Heaven\'s Feel II', image: 'img/recent/recent-2.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Mushishi Zoku Shou: Suzu no Shizuku', image: 'img/recent/recent-3.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Fate/Zero 2nd Season', image: 'img/recent/recent-4.jpg', ep: '18 / 18', views: 9141,
-                        comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Kizumonogatari II: Nekket su-hen', image: 'img/recent/recent-5.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'The Seven Deadly Sins: Wrath', image: 'img/recent/recent-6.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] }
+                    { title: 'Great Teacher Onizuka', image: 'img/recent/recent-1.jpg', ep: '18 / 18',
+                        views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] },
+                    { title: 'Fate/stay night: Heaven\'s Feel II', image: 'img/recent/recent-2.jpg',
+                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] },
+                    { title: 'Mushishi Zoku Shou: Suzu no Shizuku', image: 'img/recent/recent-3.jpg',
+                        ep: '18 / 18', views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] }
+                ],
+                live: [
+                    { title: 'Shouwa Genroku Rakugo Shinjuu', image: 'img/live/live-1.jpg', ep: '18 / 18',
+                        views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] },
+                    { title: 'Mushishi Zoku Shou 2nd Season', image: 'img/live/live-2.jpg', ep: '18 / 18',
+                        views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] },
+                    { title: 'Mushishi Zoku Shou: Suzu', image: 'img/live/live-3.jpg', ep: '18 / 18',
+                        views: 9141, comments: 11, tags: ['Active', 'Movie'], season: 1,
+                        episodes: [{ number: 1, title: 'Episode 1', youtube: '' }] }
                 ],
                 topViews: [
                     { title: 'Boruto: Naruto next generations', image: 'img/sidebar/tv-1.jpg', ep: '18 / ?',
@@ -875,20 +1041,6 @@
                         views: 9141, filter: 'years month' },
                     { title: 'Fate stay night UBW', image: 'img/sidebar/tv-5.jpg', ep: '18 / ?', views: 9141,
                         filter: 'day' }
-                ],
-                live: [
-                    { title: 'Shouwa Genroku Rakugo Shinjuu', image: 'img/live/live-1.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Mushishi Zoku Shou 2nd Season', image: 'img/live/live-2.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Mushishi Zoku Shou: Suzu', image: 'img/live/live-3.jpg', ep: '18 / 18', views: 9141,
-                        comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'The Seven Deadly Sins: Wrath', image: 'img/live/live-4.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Fate/stay night: Heaven\'s Feel II', image: 'img/live/live-5.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] },
-                    { title: 'Kizumonogatari II: Nekketsu', image: 'img/live/live-6.jpg', ep: '18 / 18',
-                        views: 9141, comments: 11, tags: ['Active', 'Movie'] }
                 ],
                 comments: [
                     { user: 'AnimeFan42', text: 'Absolutely loved this episode!', time: '2 hours ago' },
@@ -910,53 +1062,157 @@
                 return DEFAULT_DATA[key] || [];
             }
 
-            function setData(key, value) {
-                localStorage.setItem('streaminghub_' + key, JSON.stringify(value));
+            // ==========================================
+            // EPISODE SELECTOR LOGIC
+            // ==========================================
+            let currentAnimeData = null;
+            let currentSeason = 1;
+            let currentEpisodeIndex = -1;
+
+            function loadAnimeData() {
+                // Try to get anime data from the first trending item with episodes
+                const trending = getData('trending');
+                const withEpisodes = trending.find(item => item.episodes && item.episodes.length > 0);
+                if (withEpisodes) {
+                    currentAnimeData = withEpisodes;
+                    return withEpisodes;
+                }
+                // Fallback: check popular
+                const popular = getData('popular');
+                const withEpisodesPop = popular.find(item => item.episodes && item.episodes.length > 0);
+                if (withEpisodesPop) {
+                    currentAnimeData = withEpisodesPop;
+                    return withEpisodesPop;
+                }
+                // Check recent
+                const recent = getData('recent');
+                const withEpisodesRec = recent.find(item => item.episodes && item.episodes.length > 0);
+                if (withEpisodesRec) {
+                    currentAnimeData = withEpisodesRec;
+                    return withEpisodesRec;
+                }
+                return null;
             }
 
-            function renderCard(item, index) {
-                const tags = item.tags ? item.tags.map(t => `<li>${t}</li>`).join('') : '';
-                return `
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="product__item">
-                            <div class="product__item__pic set-bg" data-setbg="${item.image}">
-                                <div class="ep">${item.ep || '0 / 0'}</div>
-                                <div class="comment"><i class="fa fa-comments"></i> ${item.comments || 0}</div>
-                                <div class="view"><i class="fa fa-eye"></i> ${item.views || 0}</div>
-                            </div>
-                            <div class="product__item__text">
-                                <ul>${tags}</ul>
-                                <h5><a href="#">${item.title}</a></h5>
-                            </div>
-                        </div>
-                    </div>
-                `;
+            function getUniqueSeasons(anime) {
+                if (!anime || !anime.episodes) return [];
+                const seasons = [...new Set(anime.episodes.map(ep => ep.season || 1))];
+                return seasons.sort((a, b) => a - b);
             }
 
-            function renderTopView(item) {
-                return `
-                    <div class="product__sidebar__view__item set-bg mix ${item.filter || ''}" data-setbg="${item.image}">
-                        <div class="ep">${item.ep || '0 / 0'}</div>
-                        <div class="view"><i class="fa fa-eye"></i> ${item.views || 0}</div>
-                        <h5><a href="#">${item.title}</a></h5>
-                    </div>
-                `;
+            function getEpisodesForSeason(anime, season) {
+                if (!anime || !anime.episodes) return [];
+                return anime.episodes.filter(ep => (ep.season || 1) === season);
             }
 
-            function renderComment(item) {
-                return `
-                    <div class="product__sidebar__comment__item d-flex align-items-start gap-3 mb-3">
-                        <div class="product__sidebar__comment__item__pic flex-shrink-0">
-                            <img src="img/sidebar/comment-${Math.floor(Math.random() * 4) + 1}.jpg" alt="avatar" style="width:44px;height:44px;border-radius:50%;object-fit:cover;">
-                        </div>
-                        <div class="product__sidebar__comment__item__text">
-                            <h6 style="font-size:14px;font-weight:600;margin:0;">${item.user}</h6>
-                            <p style="font-size:13px;color:var(--text-muted);margin:2px 0;">${item.text}</p>
-                            <span style="font-size:11px;color:var(--text-muted);"><i class="fa fa-clock-o"></i> ${item.time}</span>
-                        </div>
-                    </div>
-                `;
+            function renderEpisodeSelector(anime) {
+                const container = document.getElementById('episodeSelector');
+                const seasonSelect = document.getElementById('seasonSelect');
+                const episodeList = document.getElementById('episodeList');
+                const episodeCount = document.getElementById('episodeCount');
+                const titleEl = document.getElementById('episodeSelectorTitle');
+
+                if (!anime || !anime.episodes || anime.episodes.length === 0) {
+                    container.style.display = 'none';
+                    return;
+                }
+
+                container.style.display = 'block';
+                titleEl.textContent = anime.title || 'Episodes';
+
+                const seasons = getUniqueSeasons(anime);
+                const currentSeasonValue = currentSeason || seasons[0] || 1;
+
+                // Populate season select
+                seasonSelect.innerHTML = '';
+                seasons.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s;
+                    opt.textContent = `Season ${s}`;
+                    if (s === currentSeasonValue) opt.selected = true;
+                    seasonSelect.appendChild(opt);
+                });
+
+                if (seasons.length === 0) {
+                    seasonSelect.innerHTML = '<option value="1">Season 1</option>';
+                }
+
+                // Show episodes for current season
+                const episodes = getEpisodesForSeason(anime, currentSeasonValue);
+                episodeCount.textContent = `${episodes.length} episodes`;
+
+                if (episodes.length === 0) {
+                    episodeList.innerHTML = '<div class="no-episodes">No episodes found for this season</div>';
+                    return;
+                }
+
+                let html = '';
+                episodes.forEach((ep, idx) => {
+                    const isActive = (currentEpisodeIndex === idx && currentSeason === currentSeasonValue);
+                    const hasVideo = ep.youtube && ep.youtube.trim() !== '';
+                    const videoClass = hasVideo ? 'has-video' : 'no-video';
+                    const activeClass = isActive ? 'active' : '';
+                    const title = ep.title || `Episode ${ep.number}`;
+                    html += `
+                        <button class="episode-btn ${videoClass} ${activeClass}" 
+                                data-index="${idx}" 
+                                data-season="${currentSeasonValue}"
+                                data-url="${ep.youtube || ''}"
+                                data-title="${title}"
+                                ${!hasVideo ? 'disabled' : ''}>
+                            ${ep.number || idx + 1}. ${title}
+                        </button>
+                    `;
+                });
+                episodeList.innerHTML = html;
+
+                // Add click handlers
+                episodeList.querySelectorAll('.episode-btn:not(.no-video)').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const url = this.dataset.url;
+                        const title = this.dataset.title;
+                        const idx = parseInt(this.dataset.index);
+                        const season = parseInt(this.dataset.season);
+
+                        if (url) {
+                            document.getElementById('featuredVideo').src = url;
+                            document.getElementById('currentEpisodeName').textContent = title || 'Episode';
+                            currentEpisodeIndex = idx;
+                            currentSeason = season;
+
+                            // Update active state
+                            episodeList.querySelectorAll('.episode-btn').forEach(b => b.classList.remove('active'));
+                            this.classList.add('active');
+                        }
+                    });
+                });
+
+                // Auto-select first episode with video if none selected
+                if (currentEpisodeIndex === -1) {
+                    const firstWithVideo = episodes.findIndex(ep => ep.youtube && ep.youtube.trim() !== '');
+                    if (firstWithVideo !== -1) {
+                        const ep = episodes[firstWithVideo];
+                        if (ep.youtube) {
+                            document.getElementById('featuredVideo').src = ep.youtube;
+                            document.getElementById('currentEpisodeName').textContent = ep.title || `Episode ${ep.number}`;
+                            currentEpisodeIndex = firstWithVideo;
+                            currentSeason = currentSeasonValue;
+                        }
+                    }
+                }
             }
+
+            // Season select change handler
+            document.addEventListener('DOMContentLoaded', function() {
+                const seasonSelect = document.getElementById('seasonSelect');
+                if (seasonSelect) {
+                    seasonSelect.addEventListener('change', function() {
+                        currentSeason = parseInt(this.value);
+                        currentEpisodeIndex = -1;
+                        renderEpisodeSelector(currentAnimeData);
+                    });
+                }
+            });
 
             // ==========================================
             // RENDER FUNCTIONS
@@ -966,20 +1222,19 @@
                 const container = document.getElementById('heroSlider');
                 if (!container) return;
                 container.innerHTML = slides.map((slide, i) => `
-                    <div class="hero__items set-bg" data-setbg="${slide.image}">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="hero__text">
-                                    <div class="label">${slide.label || 'Featured'}</div>
-                                    <h2>${slide.title}</h2>
-                                    <p>${slide.desc || ''}</p>
-                                    <a href="${slide.link || '#'}"><span>Watch Now</span> <i class="fa fa-angle-right"></i></a>
+                        <div class="hero__items set-bg" data-setbg="${slide.image}">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="hero__text">
+                                        <div class="label">${slide.label || 'Featured'}</div>
+                                        <h2>${slide.title}</h2>
+                                        <p>${slide.desc || ''}</p>
+                                        <a href="${slide.link || '#'}"><span>Watch Now</span> <i class="fa fa-angle-right"></i></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                `).join('');
-                // Re-init owl if available
+                    `).join('');
                 if (typeof $ !== 'undefined' && $.fn.owlCarousel) {
                     try {
                         $(container).owlCarousel('destroy');
@@ -996,12 +1251,55 @@
                 }
             }
 
+            function renderCard(item, index) {
+                const tags = item.tags ? item.tags.map(t => `<li>${t}</li>`).join('') : '';
+                return `
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="product__item">
+                                <div class="product__item__pic set-bg" data-setbg="${item.image}">
+                                    <div class="ep">${item.ep || '0 / 0'}</div>
+                                    <div class="comment"><i class="fa fa-comments"></i> ${item.comments || 0}</div>
+                                    <div class="view"><i class="fa fa-eye"></i> ${item.views || 0}</div>
+                                </div>
+                                <div class="product__item__text">
+                                    <ul>${tags}</ul>
+                                    <h5><a href="#">${item.title}</a></h5>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+            }
+
+            function renderTopView(item) {
+                return `
+                        <div class="product__sidebar__view__item set-bg mix ${item.filter || ''}" data-setbg="${item.image}">
+                            <div class="ep">${item.ep || '0 / 0'}</div>
+                            <div class="view"><i class="fa fa-eye"></i> ${item.views || 0}</div>
+                            <h5><a href="#">${item.title}</a></h5>
+                        </div>
+                    `;
+            }
+
+            function renderComment(item) {
+                return `
+                        <div class="product__sidebar__comment__item d-flex align-items-start gap-3 mb-3">
+                            <div class="product__sidebar__comment__item__pic flex-shrink-0">
+                                <img src="img/sidebar/comment-${Math.floor(Math.random() * 4) + 1}.jpg" alt="avatar" style="width:44px;height:44px;border-radius:50%;object-fit:cover;">
+                            </div>
+                            <div class="product__sidebar__comment__item__text">
+                                <h6 style="font-size:14px;font-weight:600;margin:0;">${item.user}</h6>
+                                <p style="font-size:13px;color:var(--text-muted);margin:2px 0;">${item.text}</p>
+                                <span style="font-size:11px;color:var(--text-muted);"><i class="fa fa-clock-o"></i> ${item.time}</span>
+                            </div>
+                        </div>
+                    `;
+            }
+
             function renderGrid(id, key) {
                 const container = document.getElementById(id);
                 if (!container) return;
                 const items = getData(key);
                 container.innerHTML = items.map(renderCard).join('');
-                // Re-apply set-bg
                 container.querySelectorAll('.set-bg').forEach(el => {
                     const bg = el.getAttribute('data-setbg');
                     if (bg) el.style.backgroundImage = `url(${bg})`;
@@ -1017,17 +1315,12 @@
                     const bg = el.getAttribute('data-setbg');
                     if (bg) el.style.backgroundImage = `url(${bg})`;
                 });
-                // Re-init mixitup
                 if (typeof $ !== 'undefined' && $.fn.mixitup) {
                     try {
                         if (container.mixitup) container.mixitup('destroy');
                         $(container).mixitup({
-                            selectors: {
-                                target: '.product__sidebar__view__item'
-                            },
-                            animation: {
-                                duration: 300
-                            }
+                            selectors: { target: '.product__sidebar__view__item' },
+                            animation: { duration: 300 }
                         });
                     } catch (e) { /* ignore */ }
                 }
@@ -1044,7 +1337,6 @@
                 const videoUrl = getData('videoUrl') || DEFAULT_DATA.videoUrl;
                 const iframe = document.getElementById('featuredVideo');
                 if (iframe) {
-                    // Ensure it's a valid embed URL
                     let url = videoUrl;
                     if (url.includes('watch?v=')) {
                         const id = url.split('v=')[1]?.split('&')[0];
@@ -1055,7 +1347,7 @@
             }
 
             // ==========================================
-            // USER MENU (Firebase Auth)
+            // USER MENU
             // ==========================================
             function renderUserMenu(user) {
                 const container = document.getElementById('userMenuContainer');
@@ -1066,17 +1358,17 @@
                     const photoURL = user.photoURL || '';
                     const initial = displayName.charAt(0).toUpperCase();
                     container.innerHTML = `
-                        <div class="user-menu">
-                            <div class="user-avatar">
-                                ${photoURL ? `<img src="${photoURL}" alt="${displayName}">` : initial}
+                            <div class="user-menu">
+                                <div class="user-avatar">
+                                    ${photoURL ? `<img src="${photoURL}" alt="${displayName}">` : initial}
+                                </div>
+                                <div class="user-info">
+                                    <span class="user-name">${displayName}</span>
+                                    <span class="user-email">${email}</span>
+                                </div>
+                                <button class="logout-btn" id="logoutBtn">Logout</button>
                             </div>
-                            <div class="user-info">
-                                <span class="user-name">${displayName}</span>
-                                <span class="user-email">${email}</span>
-                            </div>
-                            <button class="logout-btn" id="logoutBtn">Logout</button>
-                        </div>
-                    `;
+                        `;
                     const logoutBtn = document.getElementById('logoutBtn');
                     if (logoutBtn) {
                         logoutBtn.addEventListener('click', function(e) {
@@ -1090,9 +1382,33 @@
             }
 
             // ==========================================
+            // FIRESTORE SYNC
+            // ==========================================
+            async function loadFromFirestore() {
+                try {
+                    const doc = await db.collection('websiteData').doc('content').get();
+                    if (doc.exists) {
+                        const data = doc.data();
+                        Object.keys(data).forEach(key => {
+                            if (DEFAULT_DATA.hasOwnProperty(key)) {
+                                localStorage.setItem('streaminghub_' + key, JSON.stringify(data[key]));
+                            }
+                        });
+                        return true;
+                    }
+                } catch (e) {
+                    console.warn('Firestore load error:', e);
+                }
+                return false;
+            }
+
+            // ==========================================
             // INIT
             // ==========================================
-            function init() {
+            async function init() {
+                // Try loading from Firestore first
+                await loadFromFirestore();
+
                 renderHero();
                 renderGrid('trendingGrid', 'trending');
                 renderGrid('popularGrid', 'popular');
@@ -1102,12 +1418,17 @@
                 renderComments();
                 renderVideo();
 
-                // Auth listener
+                // Setup episode selector
+                const anime = loadAnimeData();
+                if (anime) {
+                    currentAnimeData = anime;
+                    renderEpisodeSelector(anime);
+                }
+
                 auth.onAuthStateChanged(user => {
                     renderUserMenu(user);
                 });
 
-                // Re-apply set-bg for all dynamic elements
                 document.querySelectorAll('.set-bg').forEach(el => {
                     const bg = el.getAttribute('data-setbg');
                     if (bg && !el.style.backgroundImage) {
@@ -1115,13 +1436,9 @@
                     }
                 });
 
-                console.log('StreamingHub initialized. Admin can edit via localStorage keys:');
-                console.log('  streaminghub_hero, streaminghub_trending, streaminghub_popular,');
-                console.log('  streaminghub_recent, streaminghub_topViews, streaminghub_live,');
-                console.log('  streaminghub_comments, streaminghub_videoUrl');
+                console.log('StreamingHub initialized with episode selector.');
             }
 
-            // Run when DOM ready
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', init);
             } else {
