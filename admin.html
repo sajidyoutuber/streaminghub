@@ -484,30 +484,6 @@
             color: #fff;
         }
 
-        .btn-toggle {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-            padding: 4px 12px;
-            border-radius: 16px;
-            cursor: pointer;
-            font-size: 11px;
-            transition: var(--transition);
-            font-family: 'Inter', sans-serif;
-        }
-
-        .btn-toggle.active {
-            background: var(--success);
-            color: #fff;
-            border-color: var(--success);
-        }
-
-        .btn-toggle.inactive {
-            background: rgba(231, 76, 60, 0.15);
-            color: var(--accent);
-            border-color: rgba(231, 76, 60, 0.2);
-        }
-
         /* ---- Cards Grid ---- */
         .cards-grid {
             display: grid;
@@ -1156,6 +1132,7 @@
             <div class="tab-content" id="tab-settings">
                 <div class="section-header">
                     <h3><i class="fas fa-paint-brush"></i> Branding</h3>
+                    <button class="btn-add btn-add-sm" onclick="saveSiteSettings()"><i class="fas fa-save"></i> Save Settings</button>
                 </div>
                 <div class="settings-grid">
                     <div class="settings-card">
@@ -1170,7 +1147,6 @@
 
                 <div class="section-header" style="margin-top:20px;">
                     <h3><i class="fas fa-eye"></i> Show/Hide Sections</h3>
-                    <button class="btn-add btn-add-sm" onclick="saveSiteSettings()"><i class="fas fa-save"></i> Save All</button>
                 </div>
                 <div class="settings-grid" id="sectionToggles">
                     <!-- Toggles injected by JS -->
@@ -1181,6 +1157,11 @@
                 </div>
                 <div class="settings-grid" id="authToggles">
                     <!-- Auth toggles injected by JS -->
+                </div>
+
+                <div style="margin-top:16px;">
+                    <button class="btn-success" onclick="saveSiteSettings()"><i class="fas fa-save"></i> Save All Settings</button>
+                    <button class="btn-add" onclick="syncToFirestore()" style="margin-left:8px;"><i class="fas fa-cloud-upload-alt"></i> Sync to Firestore</button>
                 </div>
             </div>
 
@@ -1204,6 +1185,7 @@
 
                 <div style="margin-top:16px;">
                     <button class="btn-success" onclick="saveNavSettings()"><i class="fas fa-save"></i> Save Navigation</button>
+                    <button class="btn-add" onclick="syncToFirestore()" style="margin-left:8px;"><i class="fas fa-cloud-upload-alt"></i> Sync to Firestore</button>
                 </div>
             </div>
 
@@ -1274,6 +1256,7 @@
             // ============================================================
             const STORAGE_PREFIX = 'streaminghub_';
             let isSynced = false;
+            let isFirstLoad = true;
             const FIRESTORE_COLLECTION = 'websiteData';
 
             const DEFAULT_DATA = {
@@ -1407,12 +1390,31 @@
                     const stored = localStorage.getItem(STORAGE_PREFIX + 'siteSettings');
                     if (stored) return JSON.parse(stored);
                 } catch (e) { /* ignore */ }
-                return DEFAULT_DATA.siteSettings;
+                // Merge with defaults to ensure all keys exist
+                const defaults = DEFAULT_DATA.siteSettings;
+                const settings = { ...defaults };
+                try {
+                    const stored = localStorage.getItem(STORAGE_PREFIX + 'siteSettings');
+                    if (stored) {
+                        const parsed = JSON.parse(stored);
+                        Object.keys(parsed).forEach(key => {
+                            if (key === 'navItems' || key === 'footerNav') {
+                                // For arrays, replace entirely
+                                settings[key] = parsed[key];
+                            } else {
+                                settings[key] = parsed[key];
+                            }
+                        });
+                    }
+                } catch (e) { /* ignore */ }
+                localStorage.setItem(STORAGE_PREFIX + 'siteSettings', JSON.stringify(settings));
+                return settings;
             }
 
             function saveSettings(settings) {
                 localStorage.setItem(STORAGE_PREFIX + 'siteSettings', JSON.stringify(settings));
                 updateSyncStatus(false);
+                showToast('✅ Settings saved locally!', 'success');
             }
 
             function showToast(message, type = 'success') {
@@ -1468,7 +1470,9 @@
                 }
             }
 
-            async function loadFromFirestore() {
+            async function loadFromFirestore(force = false) {
+                // Only load from Firestore on first load or when forced
+                if (!force && !isFirstLoad) return;
                 try {
                     const doc = await db.collection(FIRESTORE_COLLECTION).doc('content').get();
                     if (doc.exists) {
@@ -1484,13 +1488,14 @@
                         updateSyncStatus(true);
                         showToast('✅ Data loaded from Firestore!', 'success');
                     } else {
-                        showToast('ℹ️ No data found. Syncing defaults...', 'info');
+                        // No data in Firestore, push defaults
                         await syncToFirestore();
                     }
                 } catch (error) {
                     console.error('Load error:', error);
-                    showToast('❌ Failed to load: ' + error.message, 'error');
+                    // Don't show error on first load, just use defaults
                 }
+                isFirstLoad = false;
             }
 
             // ============================================================
@@ -1667,7 +1672,9 @@
                 });
 
                 saveSettings(settings);
-                showToast('✅ Site settings saved!', 'success');
+                // Also save nav items if they exist
+                saveNavSettings();
+                showToast('✅ All settings saved successfully!', 'success');
                 updateSyncStatus(false);
             }
 
@@ -2034,6 +2041,8 @@
                 renderAll();
                 showToast(`Item ${index >= 0 ? 'updated' : 'added'}!`, 'success');
                 closeModal();
+                // Auto-sync after content change
+                syncToFirestore();
             });
 
             // ============================================================
@@ -2079,6 +2088,7 @@
                     renderAll();
                     renderSiteSettingsUI();
                     renderNavUI();
+                    // Load from Firestore once
                     loadFromFirestore();
                 } else {
                     loginScreen.style.display = 'block';
@@ -2136,6 +2146,9 @@
                         modalForm.dispatchEvent(new Event('submit'));
                     } else {
                         e.preventDefault();
+                        // Save all settings then sync
+                        saveSiteSettings();
+                        saveNavSettings();
                         syncToFirestore();
                     }
                 }
@@ -2144,6 +2157,7 @@
             // ============================================================
             // INIT
             // ============================================================
+            // Pre-populate defaults if empty
             Object.keys(DEFAULT_DATA).forEach(key => {
                 const existing = localStorage.getItem(STORAGE_PREFIX + key);
                 if (existing === null) {
@@ -2151,13 +2165,16 @@
                 }
             });
 
+            // Also ensure siteSettings exists with all keys
+            const settings = getSettings();
+
             checkAuth();
 
             console.log('🛠️ StreamingHub Admin Panel loaded.');
             console.log('📦 Data stored in localStorage with prefix:', STORAGE_PREFIX);
             console.log('🔑 Default credentials: admin@streaminghub.com / 123456');
-            console.log('💡 Press Ctrl+S to sync to Firestore');
-            console.log('📋 Use the tabs to manage content, settings, and navigation!');
+            console.log('💡 Press Ctrl+S to save and sync to Firestore');
+            console.log('📋 Changes are saved locally and auto-synced when you add/edit content!');
 
         })();
     </script>
