@@ -7,7 +7,7 @@
     <meta name="keywords" content="Anime, streaming, movies, entertainment">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>StreamingHub | Home</title>
+    <title id="siteTitle">StreamingHub | Home</title>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -39,6 +39,7 @@
             --text-muted: rgba(255, 255, 255, 0.7);
             --border-radius: 12px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* ========== GLOBAL RESETS ========== */
@@ -69,37 +70,166 @@
             color: var(--primary);
         }
 
-        /* ========== HEADER & USER MENU ========== */
+        /* ========== SMOOTH SECTION TOGGLES ========== */
+        .section-toggle {
+            transition: var(--transition-smooth);
+            overflow: hidden;
+        }
+
+        .section-toggle.hidden {
+            display: none !important;
+        }
+
+        .section-toggle.fade-out {
+            opacity: 0;
+            transform: translateY(-20px);
+            height: 0;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* ========== SLIM TOP BAR ========== */
         .header {
             background: rgba(11, 12, 42, 0.95);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 12px 0;
+            padding: 8px 0;
             position: sticky;
             top: 0;
             z-index: 999;
+            transition: var(--transition-smooth);
         }
-        .header__right {
+
+        .header .container {
             display: flex;
             align-items: center;
-            justify-content: flex-end;
-            gap: 12px;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .header__logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header__logo img {
+            max-height: 36px;
+            width: auto;
+            transition: var(--transition-smooth);
+        }
+
+        .header__logo .site-name {
+            font-family: 'Oswald', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-light);
+            transition: var(--transition-smooth);
+        }
+
+        .header__logo .site-name span {
+            color: var(--primary);
+        }
+
+        .header__nav .header__menu {
+            display: flex;
+            gap: 4px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
             flex-wrap: wrap;
         }
-        .header__right .search-switch {
-            color: var(--text-light);
-            font-size: 20px;
-            padding: 6px;
+
+        .header__nav .header__menu>li {
+            position: relative;
         }
-        .user-menu {
+
+        .header__nav .header__menu>li>a {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: var(--transition);
+            display: block;
+            color: var(--text-muted);
+        }
+
+        .header__nav .header__menu>li>a:hover,
+        .header__nav .header__menu>li.active>a {
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .header__nav .header__menu>li.active>a {
+            color: var(--primary);
+        }
+
+        .header__nav .header__menu .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 6px 0;
+            min-width: 160px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(8px);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+            list-style: none;
+            z-index: 100;
+        }
+
+        .header__nav .header__menu li:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .header__nav .header__menu .dropdown li a {
+            padding: 6px 16px;
+            font-size: 13px;
+            display: block;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .header__nav .header__menu .dropdown li a:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-light);
+        }
+
+        .header__right {
             display: flex;
             align-items: center;
             gap: 10px;
             flex-wrap: wrap;
         }
+
+        .header__right .search-switch {
+            color: var(--text-light);
+            font-size: 18px;
+            padding: 4px;
+            transition: var(--transition);
+        }
+
+        .header__right .search-switch:hover {
+            color: var(--primary);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
         .user-menu .user-avatar {
-            width: 38px;
-            height: 38px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             display: flex;
@@ -107,66 +237,92 @@
             justify-content: center;
             color: #fff;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 14px;
             text-transform: uppercase;
             flex-shrink: 0;
             overflow: hidden;
+            transition: var(--transition);
         }
+
         .user-menu .user-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
+
         .user-menu .user-info {
             display: flex;
             flex-direction: column;
             line-height: 1.2;
         }
+
         .user-menu .user-name {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--text-light);
-            max-width: 100px;
+            max-width: 80px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
         .user-menu .user-email {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
-            max-width: 100px;
+            max-width: 80px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
         .user-menu .logout-btn {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.12);
             color: var(--text-light);
-            padding: 5px 14px;
-            border-radius: 20px;
+            padding: 4px 12px;
+            border-radius: 16px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
             transition: var(--transition);
         }
+
         .user-menu .logout-btn:hover {
             background: var(--primary);
             border-color: var(--primary);
         }
+
         .header__right .login-link {
             color: #fff;
-            font-size: 13px;
-            padding: 6px 18px;
+            font-size: 12px;
+            padding: 5px 14px;
             background: var(--primary);
-            border-radius: 20px;
+            border-radius: 16px;
             font-weight: 500;
             transition: var(--transition);
         }
+
         .header__right .login-link:hover {
             background: var(--primary-dark);
             color: #fff;
+            transform: scale(1.05);
         }
+
+        .header__right .register-link {
+            color: var(--text-muted);
+            font-size: 12px;
+            padding: 5px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .header__right .register-link:hover {
+            border-color: var(--primary);
+            color: var(--text-light);
+        }
+
         .slicknav_menu {
             background: transparent !important;
         }
@@ -176,18 +332,20 @@
 
         /* ========== HERO / BANNER ========== */
         .hero {
-            padding: 40px 0 20px;
+            padding: 30px 0 15px;
         }
+
         .hero__items {
             border-radius: var(--border-radius);
             overflow: hidden;
-            min-height: 380px;
+            min-height: 340px;
             background-size: cover;
             background-position: center;
             position: relative;
             display: flex;
             align-items: center;
         }
+
         .hero__items::before {
             content: '';
             position: absolute;
@@ -195,60 +353,71 @@
             background: linear-gradient(135deg, rgba(11, 12, 42, 0.85) 0%, transparent 70%);
             z-index: 1;
         }
+
         .hero__text {
             position: relative;
             z-index: 2;
-            padding: 40px 30px;
+            padding: 30px 30px;
         }
+
         .hero__text .label {
             display: inline-block;
             background: var(--primary);
-            padding: 4px 16px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 3px 14px;
+            border-radius: 16px;
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
+
         .hero__text h2 {
-            font-size: clamp(24px, 4vw, 44px);
+            font-size: clamp(22px, 3.5vw, 40px);
             font-weight: 700;
             line-height: 1.2;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             font-family: 'Oswald', sans-serif;
         }
+
         .hero__text p {
-            font-size: clamp(14px, 1.2vw, 18px);
+            font-size: clamp(13px, 1.1vw, 16px);
             opacity: 0.85;
-            max-width: 500px;
-            margin-bottom: 20px;
+            max-width: 450px;
+            margin-bottom: 16px;
         }
-        .hero__text a {
+
+        .hero__text .hero-btn {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             background: var(--primary);
-            padding: 10px 28px;
-            border-radius: 30px;
+            padding: 8px 24px;
+            border-radius: 25px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             transition: var(--transition);
+            border: none;
+            color: #fff;
+            cursor: pointer;
         }
-        .hero__text a:hover {
+
+        .hero__text .hero-btn:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
             color: #fff;
+            box-shadow: 0 8px 24px var(--accent-glow);
         }
 
         /* ========== SECTION TITLES ========== */
         .section-title h4 {
             font-family: 'Oswald', sans-serif;
-            font-size: clamp(20px, 2.5vw, 28px);
+            font-size: clamp(18px, 2.2vw, 24px);
             font-weight: 600;
             position: relative;
-            padding-left: 18px;
+            padding-left: 16px;
         }
+
         .section-title h4::before {
             content: '';
             position: absolute;
@@ -256,22 +425,24 @@
             top: 50%;
             transform: translateY(-50%);
             width: 4px;
-            height: 28px;
+            height: 24px;
             background: var(--primary);
             border-radius: 4px;
         }
+
         .btn__all .primary-btn {
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-size: 13px;
+            padding: 6px 18px;
+            border-radius: 25px;
+            font-size: 12px;
             font-weight: 500;
             transition: var(--transition);
             display: inline-flex;
             align-items: center;
             gap: 6px;
         }
+
         .btn__all .primary-btn:hover {
             background: var(--primary);
             border-color: var(--primary);
@@ -280,98 +451,187 @@
 
         /* ========== PRODUCT / ANIME CARDS ========== */
         .product {
-            padding: 40px 0 60px;
+            padding: 30px 0 50px;
         }
+
         .product__item {
             background: rgba(255, 255, 255, 0.03);
             border-radius: var(--border-radius);
             overflow: hidden;
             transition: var(--transition);
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             border: 1px solid rgba(255, 255, 255, 0.04);
             height: 100%;
         }
+
         .product__item:hover {
-            transform: translateY(-6px);
+            transform: translateY(-6px) scale(1.01);
             border-color: rgba(231, 76, 60, 0.3);
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
         }
+
         .product__item__pic {
-            height: 220px;
+            height: 200px;
             background-size: cover;
             background-position: center;
             position: relative;
             border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
+
         .product__item__pic .ep {
             position: absolute;
-            top: 12px;
-            left: 12px;
+            top: 10px;
+            left: 10px;
             background: rgba(0, 0, 0, 0.7);
-            padding: 2px 12px;
-            border-radius: 12px;
-            font-size: 12px;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 11px;
             font-weight: 600;
             backdrop-filter: blur(4px);
         }
+
         .product__item__pic .view,
         .product__item__pic .comment {
             position: absolute;
-            bottom: 12px;
+            bottom: 10px;
             background: rgba(0, 0, 0, 0.6);
-            padding: 2px 12px;
-            border-radius: 12px;
-            font-size: 12px;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 11px;
             backdrop-filter: blur(4px);
         }
+
         .product__item__pic .view {
-            right: 12px;
+            right: 10px;
         }
         .product__item__pic .comment {
-            right: 80px;
+            right: 70px;
         }
+
         .product__item__text {
-            padding: 16px 16px 20px;
+            padding: 14px 14px 18px;
         }
+
         .product__item__text ul {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
             list-style: none;
             padding: 0;
-            margin: 0 0 8px;
+            margin: 0 0 6px;
         }
+
         .product__item__text ul li {
-            font-size: 11px;
+            font-size: 10px;
             background: rgba(231, 76, 60, 0.15);
             color: var(--primary);
-            padding: 2px 12px;
-            border-radius: 12px;
+            padding: 1px 10px;
+            border-radius: 10px;
             font-weight: 600;
             text-transform: uppercase;
         }
+
         .product__item__text h5 {
-            font-size: clamp(14px, 1.1vw, 17px);
+            font-size: clamp(13px, 1vw, 16px);
             font-weight: 600;
             margin: 0;
             font-family: 'Oswald', sans-serif;
         }
+
         .product__item__text h5 a {
             color: var(--text-light);
             transition: var(--transition);
         }
+
         .product__item__text h5 a:hover {
             color: var(--primary);
+        }
+
+        .product__item__text .watch-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: #fff;
+            padding: 3px 14px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 6px;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .product__item__text .watch-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        /* ========== ALL ANIMES SECTION ========== */
+        .all-animes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .all-anime-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            cursor: pointer;
+        }
+
+        .all-anime-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(231, 76, 60, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .all-anime-card .card-img {
+            height: 160px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .all-anime-card .card-img .ep-badge {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            backdrop-filter: blur(4px);
+        }
+
+        .all-anime-card .card-body {
+            padding: 10px 12px 12px;
+        }
+
+        .all-anime-card .card-body .title {
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'Oswald', sans-serif;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .all-anime-card .card-body .meta {
+            font-size: 11px;
+            color: var(--text-muted);
         }
 
         /* ========== SIDEBAR ========== */
         .product__sidebar__view__item {
             background-size: cover;
             background-position: center;
-            padding: 20px;
+            padding: 16px;
             border-radius: var(--border-radius);
-            margin-bottom: 16px;
-            min-height: 140px;
+            margin-bottom: 14px;
+            min-height: 120px;
             position: relative;
             display: flex;
             flex-direction: column;
@@ -379,147 +639,172 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: var(--transition);
         }
+
         .product__sidebar__view__item:hover {
             transform: scale(1.02);
             border-color: rgba(231, 76, 60, 0.3);
         }
+
         .product__sidebar__view__item .ep,
         .product__sidebar__view__item .view {
-            font-size: 12px;
+            font-size: 11px;
             background: rgba(0, 0, 0, 0.6);
-            padding: 2px 12px;
-            border-radius: 12px;
+            padding: 2px 10px;
+            border-radius: 10px;
             display: inline-block;
             backdrop-filter: blur(4px);
             width: fit-content;
         }
+
         .product__sidebar__view__item h5 {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
-            margin: 8px 0 0;
+            margin: 6px 0 0;
             font-family: 'Oswald', sans-serif;
         }
+
         .product__sidebar__view__item h5 a {
             color: #fff;
             transition: var(--transition);
         }
+
         .product__sidebar__view__item h5 a:hover {
             color: var(--primary);
         }
+
         .filter__controls {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
             list-style: none;
             padding: 0;
-            margin: 0 0 16px;
+            margin: 0 0 12px;
         }
+
         .filter__controls li {
             cursor: pointer;
-            padding: 4px 16px;
-            border-radius: 20px;
-            font-size: 13px;
+            padding: 3px 14px;
+            border-radius: 16px;
+            font-size: 12px;
             font-weight: 500;
             background: rgba(255, 255, 255, 0.05);
             transition: var(--transition);
         }
+
         .filter__controls li.active,
         .filter__controls li:hover {
             background: var(--primary);
             color: #fff;
         }
 
-        /* ========== WATCH NOW BUTTON ON CARDS ========== */
-        .product__item__text .watch-btn {
-            display: inline-block;
-            background: var(--primary);
-            color: #fff;
-            padding: 4px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 8px;
-            transition: var(--transition);
-            border: none;
-            cursor: pointer;
-        }
-        .product__item__text .watch-btn:hover {
-            background: var(--primary-dark);
-            transform: scale(1.05);
-        }
-
-        /* ========== RESPONSIVE TWEAKS ========== */
+        /* ========== RESPONSIVE ========== */
         @media (max-width: 991px) {
             .user-menu .user-email {
                 display: none;
             }
             .user-menu .user-name {
-                max-width: 60px;
-                font-size: 13px;
+                max-width: 50px;
+                font-size: 12px;
             }
             .hero__items {
-                min-height: 280px;
+                min-height: 250px;
             }
             .hero__text {
-                padding: 30px 20px;
+                padding: 25px 20px;
             }
             .product__item__pic {
-                height: 180px;
+                height: 160px;
+            }
+            .all-animes-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
         }
+
         @media (max-width: 767px) {
             .header__right {
-                gap: 6px;
+                gap: 4px;
             }
             .user-menu .user-info {
                 display: none;
             }
             .user-menu .logout-btn {
-                padding: 4px 12px;
-                font-size: 11px;
+                padding: 3px 10px;
+                font-size: 10px;
+            }
+            .header__logo .site-name {
+                font-size: 16px;
+            }
+            .header__logo img {
+                max-height: 28px;
             }
             .hero__items {
-                min-height: 220px;
+                min-height: 200px;
             }
             .hero__text h2 {
-                font-size: 22px;
+                font-size: 20px;
             }
             .hero__text p {
-                font-size: 13px;
+                font-size: 12px;
             }
-            .hero__text a {
-                padding: 8px 20px;
-                font-size: 13px;
-            }
-            .product__item__pic {
-                height: 160px;
-            }
-            .section-title h4 {
-                font-size: 18px;
-            }
-        }
-        @media (max-width: 480px) {
-            .hero__items {
-                min-height: 180px;
-                border-radius: 8px;
-            }
-            .hero__text {
-                padding: 20px 16px;
-            }
-            .hero__text h2 {
-                font-size: 18px;
+            .hero__text .hero-btn {
+                padding: 6px 18px;
+                font-size: 12px;
             }
             .product__item__pic {
                 height: 140px;
             }
+            .section-title h4 {
+                font-size: 16px;
+            }
+            .all-animes-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+                gap: 12px;
+            }
+            .all-anime-card .card-img {
+                height: 130px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header__nav .header__menu>li>a {
+                font-size: 12px;
+                padding: 4px 10px;
+            }
+            .hero__items {
+                min-height: 160px;
+                border-radius: 8px;
+            }
+            .hero__text {
+                padding: 16px 14px;
+            }
+            .hero__text h2 {
+                font-size: 17px;
+            }
+            .hero__text .label {
+                font-size: 10px;
+                padding: 2px 10px;
+            }
+            .product__item__pic {
+                height: 120px;
+            }
             .product__item__text h5 {
-                font-size: 14px;
+                font-size: 13px;
+            }
+            .all-animes-grid {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+                gap: 10px;
+            }
+            .all-anime-card .card-img {
+                height: 110px;
+            }
+            .all-anime-card .card-body .title {
+                font-size: 12px;
             }
         }
 
         /* ========== UTILITY ========== */
         .spad {
-            padding: 40px 0;
+            padding: 30px 0;
         }
         .set-bg {
             background-size: cover;
@@ -529,10 +814,42 @@
             text-align: center;
         }
         .mb-3 {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
         .mt-3 {
-            margin-top: 16px;
+            margin-top: 14px;
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .fade-in-up:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+        .fade-in-up:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+        .fade-in-up:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+        .fade-in-up:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+        .fade-in-up:nth-child(6) {
+            animation-delay: 0.5s;
         }
     </style>
 </head>
@@ -547,41 +864,24 @@
     <!-- ====== HEADER ====== -->
     <header class="header">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-6 col-lg-2">
-                    <div class="header__logo">
-                        <a href="./index.html">
-                            <img src="img/logo.png" alt="StreamingHub" style="max-height:42px; width:auto;">
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-8 d-none d-lg-block">
-                    <div class="header__nav">
-                        <nav class="header__menu">
-                            <ul>
-                                <li class="active"><a href="./index.html">Home</a></li>
-                                <li>
-                                    <a href="./categories.html">Categories <span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="./categories.html">All Categories</a></li>
-                                        <li><a href="./anime-details.html">Anime Details</a></li>
-                                        <li><a href="./anime-watching.html">Watch</a></li>
-                                        <li><a href="./blog-details.html">Blog</a></li>
-                                        <li><a href="./signup.html">Sign Up</a></li>
-                                        <li><a href="./login.html">Login</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="./blog.html">Blog</a></li>
-                                <li><a href="#">Contact</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-                <div class="col-6 col-lg-2">
-                    <div class="header__right">
-                        <a href="#" class="search-switch"><span class="icon_search"></span></a>
-                        <div id="userMenuContainer"></div>
-                    </div>
+            <div class="header__logo">
+                <a href="./index.html" id="logoLink">
+                    <img src="img/logo.png" alt="StreamingHub" id="siteLogo">
+                    <span class="site-name" id="siteNameDisplay">Streaming<span>Hub</span></span>
+                </a>
+            </div>
+            <div class="header__nav d-none d-lg-block">
+                <nav>
+                    <ul class="header__menu" id="navMenu">
+                        <!-- Nav items injected by JS -->
+                    </ul>
+                </nav>
+            </div>
+            <div class="header__right">
+                <a href="#" class="search-switch"><span class="icon_search"></span></a>
+                <div id="userMenuContainer"></div>
+                <div id="authButtons" style="display:flex;gap:6px;align-items:center;">
+                    <!-- Login/Register buttons injected by JS -->
                 </div>
             </div>
             <div id="mobile-menu-wrap" class="d-lg-none"></div>
@@ -589,7 +889,7 @@
     </header>
 
     <!-- ====== HERO / BANNER SECTION ====== -->
-    <section class="hero" id="heroSection">
+    <section class="hero section-toggle" id="heroSection" data-section="hero">
         <div class="container">
             <div class="hero__slider owl-carousel" id="heroSlider">
                 <!-- Slides injected by JS -->
@@ -597,8 +897,24 @@
         </div>
     </section>
 
+    <!-- ====== ALL ANIMES SECTION ====== -->
+    <section class="product spad section-toggle" id="allAnimesSection" data-section="allAnimes">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-title">
+                        <h4>All Animes</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="all-animes-grid" id="allAnimesGrid">
+                <!-- Cards injected by JS -->
+            </div>
+        </div>
+    </section>
+
     <!-- ====== TRENDING NOW ====== -->
-    <section class="product spad" id="trendingSection">
+    <section class="product spad section-toggle" id="trendingSection" data-section="trending">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-md-7 col-sm-6">
@@ -619,7 +935,7 @@
     </section>
 
     <!-- ====== POPULAR SHOWS ====== -->
-    <section class="product spad" id="popularSection">
+    <section class="product spad section-toggle" id="popularSection" data-section="popular">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-md-7 col-sm-6">
@@ -640,7 +956,7 @@
     </section>
 
     <!-- ====== RECENTLY ADDED ====== -->
-    <section class="product spad" id="recentSection">
+    <section class="product spad section-toggle" id="recentSection" data-section="recent">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-md-7 col-sm-6">
@@ -661,7 +977,7 @@
     </section>
 
     <!-- ====== SIDEBAR + TOP VIEWS ====== -->
-    <section class="product spad" id="sidebarSection">
+    <section class="product spad section-toggle" id="sidebarSection" data-section="sidebar">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8">
@@ -721,21 +1037,21 @@
             <div class="row align-items-center">
                 <div class="col-lg-3 col-md-4">
                     <div class="footer__logo">
-                        <a href="./index.html"><img src="img/logo.png" alt="StreamingHub" style="max-height:36px;"></a>
+                        <a href="./index.html" id="footerLogoLink">
+                            <img src="img/logo.png" alt="StreamingHub" id="footerLogo" style="max-height:32px;">
+                            <span class="site-name" id="footerSiteName" style="font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:var(--text-light);margin-left:8px;">Streaming<span style="color:var(--primary);">Hub</span></span>
+                        </a>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-4">
                     <div class="footer__nav">
-                        <ul class="d-flex justify-content-center gap-3 flex-wrap list-unstyled">
-                            <li><a href="./index.html">Home</a></li>
-                            <li><a href="./categories.html">Categories</a></li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="#">Contact</a></li>
+                        <ul class="d-flex justify-content-center gap-3 flex-wrap list-unstyled" id="footerNav">
+                            <!-- Footer nav injected by JS -->
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-4 text-md-end text-center">
-                    <p class="mb-0" style="font-size:13px; color:var(--text-muted);">
+                    <p class="mb-0" style="font-size:12px; color:var(--text-muted);">
                         &copy; <script>
                             document.write(new Date().getFullYear());
                         </script> Made with <i class="fa fa-heart" style="color:var(--primary);"></i> by <a href="https://t.me/aura_sajid" target="_blank" style="color:var(--primary);">SAJID</a>
@@ -866,7 +1182,33 @@
                     { user: 'OtakuKing', text: 'Best anime of the season hands down.', time: '5 hours ago' },
                     { user: 'WeebMaster', text: 'Can\'t wait for the next season!', time: '1 day ago' },
                     { user: 'SakuraLover', text: 'The animation quality is insane.', time: '2 days ago' }
-                ]
+                ],
+                // Site Settings
+                siteSettings: {
+                    siteName: 'StreamingHub',
+                    logo: 'img/logo.png',
+                    navItems: [
+                        { label: 'Home', link: './index.html', active: true },
+                        { label: 'Categories', link: './categories.html', active: false },
+                        { label: 'Blog', link: './blog.html', active: false },
+                        { label: 'Contact', link: '#', active: false }
+                    ],
+                    footerNav: [
+                        { label: 'Home', link: './index.html' },
+                        { label: 'Categories', link: './categories.html' },
+                        { label: 'Blog', link: './blog.html' },
+                        { label: 'Contact', link: '#' }
+                    ],
+                    showLogin: true,
+                    showRegister: true,
+                    showHero: true,
+                    showAllAnimes: true,
+                    showTrending: true,
+                    showPopular: true,
+                    showRecent: true,
+                    showLive: true,
+                    showSidebar: true
+                }
             };
 
             // ==========================================
@@ -880,24 +1222,103 @@
                 return DEFAULT_DATA[key] || [];
             }
 
+            function getSettings() {
+                try {
+                    const stored = localStorage.getItem('streaminghub_siteSettings');
+                    if (stored) return JSON.parse(stored);
+                } catch (e) { /* ignore */ }
+                return DEFAULT_DATA.siteSettings;
+            }
+
+            function saveSettings(settings) {
+                localStorage.setItem('streaminghub_siteSettings', JSON.stringify(settings));
+            }
+
             // ==========================================
             // REDIRECT TO PLAYER
             // ==========================================
             function redirectToPlayer(animeData, season, episodeIndex) {
-                // Store data in sessionStorage for player.html to read
                 const dataToStore = {
                     anime: animeData,
                     season: season,
                     episodeIndex: episodeIndex
                 };
                 sessionStorage.setItem('playerData', JSON.stringify(dataToStore));
-                // Redirect to player.html
                 window.location.href = './player.html';
             }
 
             // ==========================================
             // RENDER FUNCTIONS
             // ==========================================
+            function renderSiteSettings() {
+                const settings = getSettings();
+
+                // Site name
+                document.title = settings.siteName + ' | Home';
+                document.getElementById('siteNameDisplay').innerHTML = settings.siteName.replace(/(Hub|Streaming)/g,
+                    match => match === 'Hub' ? '<span>Hub</span>' : match) ||
+                    'Streaming<span>Hub</span>';
+                document.getElementById('siteNameDisplay').innerHTML = settings.siteName ?
+                    settings.siteName.replace(/Hub/g, '<span>Hub</span>').replace(/Streaming/g, '') :
+                    'Streaming<span>Hub</span>';
+
+                document.getElementById('footerSiteName').innerHTML = settings.siteName ?
+                    settings.siteName.replace(/Hub/g, '<span style="color:var(--primary);">Hub</span>') :
+                    'Streaming<span style="color:var(--primary);">Hub</span>';
+
+                // Logo
+                if (settings.logo) {
+                    document.getElementById('siteLogo').src = settings.logo;
+                    document.getElementById('footerLogo').src = settings.logo;
+                }
+
+                // Nav items
+                const navContainer = document.getElementById('navMenu');
+                if (navContainer) {
+                    navContainer.innerHTML = settings.navItems.map(item =>
+                        `<li class="${item.active ? 'active' : ''}"><a href="${item.link}">${item.label}</a></li>`
+                    ).join('');
+                }
+
+                // Footer nav
+                const footerNav = document.getElementById('footerNav');
+                if (footerNav) {
+                    footerNav.innerHTML = settings.footerNav.map(item =>
+                        `<li><a href="${item.link}">${item.label}</a></li>`
+                    ).join('');
+                }
+
+                // Auth buttons
+                const authContainer = document.getElementById('authButtons');
+                if (authContainer) {
+                    let html = '';
+                    if (settings.showLogin) {
+                        html += `<a href="./login.html" class="login-link">Login</a>`;
+                    }
+                    if (settings.showRegister) {
+                        html += `<a href="./signup.html" class="register-link">Register</a>`;
+                    }
+                    authContainer.innerHTML = html;
+                }
+
+                // Toggle sections
+                const sections = ['hero', 'allAnimes', 'trending', 'popular', 'recent', 'live', 'sidebar'];
+                sections.forEach(section => {
+                    const el = document.querySelector(`[data-section="${section}"]`);
+                    if (el) {
+                        const settingKey = 'show' + section.charAt(0).toUpperCase() + section.slice(1);
+                        const show = settings[settingKey] !== undefined ? settings[settingKey] : true;
+                        if (!show) {
+                            el.classList.add('hidden');
+                        } else {
+                            el.classList.remove('hidden');
+                        }
+                    }
+                });
+
+                return settings;
+            }
+
             function renderHero() {
                 const slides = getData('hero');
                 const container = document.getElementById('heroSlider');
@@ -910,12 +1331,40 @@
                                         <div class="label">${slide.label || 'Featured'}</div>
                                         <h2>${slide.title}</h2>
                                         <p>${slide.desc || ''}</p>
-                                        <a href="${slide.link || '#'}"><span>Watch Now</span> <i class="fa fa-angle-right"></i></a>
+                                        <button class="hero-btn" data-slide="${i}">▶ Watch Now</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     `).join('');
+
+                // Add click handlers to hero buttons
+                container.querySelectorAll('.hero-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.dataset.slide);
+                        const slides = getData('hero');
+                        const slide = slides[index];
+                        // Try to find matching anime in collections
+                        const allAnimes = getAllAnimes();
+                        const match = allAnimes.find(a => a.title === slide.title);
+                        if (match && match.episodes && match.episodes.length > 0) {
+                            const firstValid = match.episodes.findIndex(ep => ep.youtube && ep.youtube
+                            .trim() !== '');
+                            redirectToPlayer(match, match.season || 1, firstValid !== -1 ? firstValid : 0);
+                        } else {
+                            // Try to find by title similarity
+                            const fallback = allAnimes.find(a => slide.title.toLowerCase().includes(a.title
+                            .toLowerCase()) || a.title.toLowerCase().includes(slide.title.toLowerCase()));
+                            if (fallback && fallback.episodes && fallback.episodes.length > 0) {
+                                const firstValid = fallback.episodes.findIndex(ep => ep.youtube && ep
+                                    .youtube.trim() !== '');
+                                redirectToPlayer(fallback, fallback.season || 1, firstValid !== -1 ?
+                                    firstValid : 0);
+                            }
+                        }
+                    });
+                });
+
                 if (typeof $ !== 'undefined' && $.fn.owlCarousel) {
                     try {
                         $(container).owlCarousel('destroy');
@@ -925,18 +1374,73 @@
                             nav: true,
                             dots: true,
                             autoplay: true,
-                            autoplayTimeout: 6000,
-                            animateOut: 'fadeOut'
+                            autoplayTimeout: 5000,
+                            animateOut: 'fadeOut',
+                            smartSpeed: 800
                         });
                     } catch (e) { /* ignore */ }
                 }
             }
 
+            function getAllAnimes() {
+                const collections = ['trending', 'popular', 'recent', 'live'];
+                let all = [];
+                collections.forEach(key => {
+                    const items = getData(key);
+                    all = all.concat(items);
+                });
+                return all;
+            }
+
+            function renderAllAnimes() {
+                const container = document.getElementById('allAnimesGrid');
+                if (!container) return;
+                const allAnimes = getAllAnimes();
+                if (allAnimes.length === 0) {
+                    container.innerHTML =
+                        '<div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:30px;">No animes available yet.</div>';
+                    return;
+                }
+                container.innerHTML = allAnimes.map((item, idx) => {
+                    const epCount = item.episodes ? item.episodes.length : 0;
+                    const hasVideo = item.episodes ? item.episodes.some(ep => ep.youtube && ep.youtube.trim() !==
+                        '') : false;
+                    return `
+                        <div class="all-anime-card fade-in-up" style="animation-delay:${(idx % 6) * 0.08}s">
+                            <div class="card-img set-bg" data-setbg="${item.image || 'img/default.jpg'}">
+                                ${epCount > 0 ? `<span class="ep-badge">${epCount} eps</span>` : ''}
+                                ${hasVideo ? '<span style="position:absolute;top:8px;right:8px;background:rgba(46,204,113,0.8);padding:2px 8px;border-radius:10px;font-size:9px;"><i class="fas fa-play"></i></span>' : ''}
+                            </div>
+                            <div class="card-body" onclick="handleAllAnimeClick(${idx})">
+                                <div class="title">${item.title || 'Untitled'}</div>
+                                <div class="meta">${item.ep || ''} · ${item.views || 0} views</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Apply set-bg
+                container.querySelectorAll('.set-bg').forEach(el => {
+                    const bg = el.getAttribute('data-setbg');
+                    if (bg) el.style.backgroundImage = `url(${bg})`;
+                });
+            }
+
+            // Global handler for all anime card clicks
+            window.handleAllAnimeClick = function(index) {
+                const allAnimes = getAllAnimes();
+                const item = allAnimes[index];
+                if (item && item.episodes && item.episodes.length > 0) {
+                    const firstValid = item.episodes.findIndex(ep => ep.youtube && ep.youtube.trim() !== '');
+                    redirectToPlayer(item, item.season || 1, firstValid !== -1 ? firstValid : 0);
+                }
+            };
+
             function renderCard(item, index, collectionKey) {
                 const tags = item.tags ? item.tags.map(t => `<li>${t}</li>`).join('') : '';
                 const hasEpisodes = item.episodes && item.episodes.length > 0;
                 return `
-                        <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="col-lg-4 col-md-6 col-sm-6 fade-in-up" style="animation-delay:${(index % 6) * 0.08}s">
                             <div class="product__item">
                                 <div class="product__item__pic set-bg" data-setbg="${item.image}">
                                     <div class="ep">${item.ep || '0 / 0'}</div>
@@ -953,31 +1457,6 @@
                     `;
             }
 
-            function renderTopView(item) {
-                return `
-                        <div class="product__sidebar__view__item set-bg mix ${item.filter || ''}" data-setbg="${item.image}">
-                            <div class="ep">${item.ep || '0 / 0'}</div>
-                            <div class="view"><i class="fa fa-eye"></i> ${item.views || 0}</div>
-                            <h5><a href="#">${item.title}</a></h5>
-                        </div>
-                    `;
-            }
-
-            function renderComment(item) {
-                return `
-                        <div class="product__sidebar__comment__item d-flex align-items-start gap-3 mb-3">
-                            <div class="product__sidebar__comment__item__pic flex-shrink-0">
-                                <img src="img/sidebar/comment-${Math.floor(Math.random() * 4) + 1}.jpg" alt="avatar" style="width:44px;height:44px;border-radius:50%;object-fit:cover;">
-                            </div>
-                            <div class="product__sidebar__comment__item__text">
-                                <h6 style="font-size:14px;font-weight:600;margin:0;">${item.user}</h6>
-                                <p style="font-size:13px;color:var(--text-muted);margin:2px 0;">${item.text}</p>
-                                <span style="font-size:11px;color:var(--text-muted);"><i class="fa fa-clock-o"></i> ${item.time}</span>
-                            </div>
-                        </div>
-                    `;
-            }
-
             function renderGrid(id, key) {
                 const container = document.getElementById(id);
                 if (!container) return;
@@ -988,7 +1467,6 @@
                     if (bg) el.style.backgroundImage = `url(${bg})`;
                 });
 
-                // Add click handlers for watch buttons
                 container.querySelectorAll('.watch-btn').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const collection = this.dataset.collection;
@@ -996,13 +1474,11 @@
                         const items = getData(collection);
                         const anime = items[index];
                         if (anime && anime.episodes && anime.episodes.length > 0) {
-                            // Find first episode with video
                             const firstValidEp = anime.episodes.findIndex(ep => ep.youtube && ep
-                            .youtube.trim() !== '');
+                                .youtube.trim() !== '');
                             if (firstValidEp !== -1) {
                                 redirectToPlayer(anime, anime.season || 1, firstValidEp);
                             } else {
-                                // No video found, still redirect but with first episode
                                 redirectToPlayer(anime, anime.season || 1, 0);
                             }
                         }
@@ -1014,7 +1490,13 @@
                 const container = document.getElementById('topViewsGrid');
                 if (!container) return;
                 const items = getData('topViews');
-                container.innerHTML = items.map(renderTopView).join('');
+                container.innerHTML = items.map((item, index) => `
+                        <div class="product__sidebar__view__item set-bg mix ${item.filter || ''}" data-setbg="${item.image}" style="animation-delay:${index * 0.1}s">
+                            <div class="ep">${item.ep || '0 / 0'}</div>
+                            <div class="view"><i class="fa fa-eye"></i> ${item.views || 0}</div>
+                            <h5><a href="#">${item.title}</a></h5>
+                        </div>
+                    `).join('');
                 container.querySelectorAll('.set-bg').forEach(el => {
                     const bg = el.getAttribute('data-setbg');
                     if (bg) el.style.backgroundImage = `url(${bg})`;
@@ -1034,7 +1516,18 @@
                 const container = document.getElementById('commentsGrid');
                 if (!container) return;
                 const items = getData('comments');
-                container.innerHTML = items.map(renderComment).join('');
+                container.innerHTML = items.map((item, index) => `
+                        <div class="product__sidebar__comment__item d-flex align-items-start gap-3 mb-3 fade-in-up" style="animation-delay:${index * 0.1}s">
+                            <div class="product__sidebar__comment__item__pic flex-shrink-0">
+                                <img src="img/sidebar/comment-${Math.floor(Math.random() * 4) + 1}.jpg" alt="avatar" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+                            </div>
+                            <div class="product__sidebar__comment__item__text">
+                                <h6 style="font-size:13px;font-weight:600;margin:0;">${item.user}</h6>
+                                <p style="font-size:12px;color:var(--text-muted);margin:2px 0;">${item.text}</p>
+                                <span style="font-size:10px;color:var(--text-muted);"><i class="fa fa-clock-o"></i> ${item.time}</span>
+                            </div>
+                        </div>
+                    `).join('');
             }
 
             // ==========================================
@@ -1067,8 +1560,11 @@
                             auth.signOut().catch(err => console.warn('Logout error:', err));
                         });
                     }
+                    // Hide auth buttons when logged in
+                    document.getElementById('authButtons').style.display = 'none';
                 } else {
-                    container.innerHTML = `<a href="./login.html" class="login-link">Login</a>`;
+                    container.innerHTML = '';
+                    document.getElementById('authButtons').style.display = 'flex';
                 }
             }
 
@@ -1081,7 +1577,7 @@
                     if (doc.exists) {
                         const data = doc.data();
                         Object.keys(data).forEach(key => {
-                            if (DEFAULT_DATA.hasOwnProperty(key)) {
+                            if (DEFAULT_DATA.hasOwnProperty(key) || key === 'siteSettings') {
                                 localStorage.setItem('streaminghub_' + key, JSON.stringify(data[key]));
                             }
                         });
@@ -1097,10 +1593,14 @@
             // INIT
             // ==========================================
             async function init() {
-                // Try loading from Firestore first
                 await loadFromFirestore();
 
+                // Render site settings first
+                renderSiteSettings();
+
+                // Render all sections
                 renderHero();
+                renderAllAnimes();
                 renderGrid('trendingGrid', 'trending');
                 renderGrid('popularGrid', 'popular');
                 renderGrid('recentGrid', 'recent');
@@ -1119,7 +1619,10 @@
                     }
                 });
 
-                console.log('StreamingHub initialized with player redirect.');
+                console.log('🚀 StreamingHub initialized with full dynamic controls.');
+                console.log('📋 All sections can be toggled from admin panel via siteSettings.');
+                console.log('🔑 siteSettings keys: showHero, showAllAnimes, showTrending, showPopular, showRecent, showLive, showSidebar');
+                console.log('🏷️ siteSettings also controls: siteName, logo, navItems, footerNav, showLogin, showRegister');
             }
 
             if (document.readyState === 'loading') {
