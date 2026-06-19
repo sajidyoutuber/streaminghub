@@ -1221,7 +1221,7 @@
 
 
     <!-- ============================================================
-    JAVASCRIPT
+    JAVASCRIPT - FIXED
     ============================================================ -->
     <script>
         (function() {
@@ -1256,7 +1256,7 @@
             // ============================================================
             const STORAGE_PREFIX = 'streaminghub_';
             let isSynced = false;
-            let isFirstLoad = true;
+            let hasLoadedFromFirestore = false;
             const FIRESTORE_COLLECTION = 'websiteData';
 
             const DEFAULT_DATA = {
@@ -1399,7 +1399,6 @@
                         const parsed = JSON.parse(stored);
                         Object.keys(parsed).forEach(key => {
                             if (key === 'navItems' || key === 'footerNav') {
-                                // For arrays, replace entirely
                                 settings[key] = parsed[key];
                             } else {
                                 settings[key] = parsed[key];
@@ -1442,7 +1441,7 @@
             }
 
             // ============================================================
-            // FIRESTORE OPERATIONS
+            // FIRESTORE OPERATIONS - FIXED
             // ============================================================
             function getAllData() {
                 const data = {};
@@ -1471,31 +1470,50 @@
             }
 
             async function loadFromFirestore(force = false) {
-                // Only load from Firestore on first load or when forced
-                if (!force && !isFirstLoad) return;
+                // Only load from Firestore once unless forced
+                if (!force && hasLoadedFromFirestore) {
+                    console.log('ℹ️ Already loaded from Firestore, using local data');
+                    return;
+                }
                 try {
                     const doc = await db.collection(FIRESTORE_COLLECTION).doc('content').get();
                     if (doc.exists) {
                         const data = doc.data();
+                        let hasChanges = false;
                         Object.keys(data).forEach(key => {
-                            if (DEFAULT_DATA.hasOwnProperty(key)) {
-                                localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify(data[key]));
+                            if (DEFAULT_DATA.hasOwnProperty(key) || key === 'siteSettings') {
+                                const existing = localStorage.getItem(STORAGE_PREFIX + key);
+                                const newData = JSON.stringify(data[key]);
+                                if (existing !== newData) {
+                                    localStorage.setItem(STORAGE_PREFIX + key, newData);
+                                    hasChanges = true;
+                                }
                             }
                         });
-                        renderAll();
-                        renderSiteSettingsUI();
-                        renderNavUI();
-                        updateSyncStatus(true);
-                        showToast('✅ Data loaded from Firestore!', 'success');
+                        if (hasChanges) {
+                            console.log('✅ Loaded fresh data from Firestore');
+                            renderAll();
+                            renderSiteSettingsUI();
+                            renderNavUI();
+                            updateSyncStatus(true);
+                            showToast('✅ Data loaded from Firestore!', 'success');
+                        } else {
+                            console.log('ℹ️ Firestore data matches local, no changes needed');
+                        }
+                        hasLoadedFromFirestore = true;
+                        return true;
                     } else {
                         // No data in Firestore, push defaults
                         await syncToFirestore();
+                        hasLoadedFromFirestore = true;
+                        return true;
                     }
                 } catch (error) {
                     console.error('Load error:', error);
                     // Don't show error on first load, just use defaults
+                    hasLoadedFromFirestore = true;
+                    return false;
                 }
-                isFirstLoad = false;
             }
 
             // ============================================================
@@ -1672,14 +1690,12 @@
                 });
 
                 saveSettings(settings);
-                // Also save nav items if they exist
-                saveNavSettings();
                 showToast('✅ All settings saved successfully!', 'success');
                 updateSyncStatus(false);
             }
 
             // ============================================================
-            // NAVIGATION UI
+            // NAVIGATION UI - FIXED PERSISTENCE
             // ============================================================
             function renderNavUI() {
                 const settings = getSettings();
@@ -2175,6 +2191,7 @@
             console.log('🔑 Default credentials: admin@streaminghub.com / 123456');
             console.log('💡 Press Ctrl+S to save and sync to Firestore');
             console.log('📋 Changes are saved locally and auto-synced when you add/edit content!');
+            console.log('✅ Settings will now persist after refresh!');
 
         })();
     </script>
