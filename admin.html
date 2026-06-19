@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StreamingHub | Advanced Admin Panel</title>
+    <title>StreamingHub | Admin Panel</title>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -192,7 +192,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 20px 28px;
+            padding: 16px 24px;
             background: var(--bg-primary);
             border-bottom: 1px solid var(--border-color);
             flex-wrap: wrap;
@@ -200,7 +200,7 @@
         }
 
         .admin-header .brand h2 {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
         }
 
@@ -210,7 +210,7 @@
 
         .admin-header .brand small {
             color: var(--text-secondary);
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 400;
             display: block;
         }
@@ -218,42 +218,42 @@
         .admin-header .user-info {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
         .admin-header .user-info .avatar {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: var(--accent);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 18px;
+            font-size: 16px;
             text-transform: uppercase;
         }
 
         .admin-header .user-info .email {
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .admin-header .user-info .sync-status {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-secondary);
-            padding: 4px 12px;
-            border-radius: 20px;
+            padding: 3px 10px;
+            border-radius: 16px;
             background: rgba(255, 255, 255, 0.05);
         }
 
         .admin-header .user-info .sync-status .dot {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
             display: inline-block;
         }
@@ -280,10 +280,10 @@
             background: rgba(46, 204, 113, 0.15);
             color: var(--success);
             border: 1px solid rgba(46, 204, 113, 0.2);
-            padding: 6px 16px;
-            border-radius: 20px;
+            padding: 5px 14px;
+            border-radius: 16px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             transition: var(--transition);
         }
 
@@ -296,10 +296,10 @@
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid var(--border-color);
             color: var(--text-secondary);
-            padding: 6px 18px;
-            border-radius: 20px;
+            padding: 5px 14px;
+            border-radius: 16px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             transition: var(--transition);
         }
 
@@ -311,7 +311,7 @@
 
         /* ---- Admin Body ---- */
         .admin-body {
-            padding: 24px 28px 32px;
+            padding: 20px 24px 28px;
             max-height: 80vh;
             overflow-y: auto;
         }
@@ -329,14 +329,67 @@
             border-radius: 4px;
         }
 
+        /* ---- Tabs ---- */
+        .admin-tabs {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .admin-tabs .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .admin-tabs .tab-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .admin-tabs .tab-btn.active {
+            color: var(--text-primary);
+            background: var(--accent);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* ---- Section Headers ---- */
         .section-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin: 28px 0 16px;
+            margin: 24px 0 14px;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
         }
 
         .section-header:first-of-type {
@@ -344,7 +397,7 @@
         }
 
         .section-header h3 {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
         }
 
@@ -355,15 +408,15 @@
 
         .section-header .badge-count {
             background: var(--bg-input);
-            padding: 2px 12px;
-            border-radius: 12px;
-            font-size: 12px;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 11px;
             color: var(--text-secondary);
         }
 
         .section-header .actions {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
         }
 
@@ -372,9 +425,9 @@
             background: var(--accent);
             color: #fff;
             border: none;
-            padding: 8px 20px;
-            border-radius: 8px;
-            font-size: 13px;
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-size: 12px;
             font-weight: 500;
             cursor: pointer;
             transition: var(--transition);
@@ -390,17 +443,17 @@
         }
 
         .btn-add-sm {
-            padding: 4px 12px;
-            font-size: 12px;
+            padding: 3px 10px;
+            font-size: 11px;
         }
 
         .btn-success {
             background: var(--success);
             color: #fff;
             border: none;
-            padding: 8px 20px;
-            border-radius: 8px;
-            font-size: 13px;
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-size: 12px;
             font-weight: 500;
             cursor: pointer;
             transition: var(--transition);
@@ -419,10 +472,10 @@
             background: rgba(231, 76, 60, 0.15);
             color: var(--accent);
             border: 1px solid rgba(231, 76, 60, 0.2);
-            padding: 4px 12px;
-            border-radius: 6px;
+            padding: 3px 10px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
             transition: var(--transition);
         }
 
@@ -431,11 +484,35 @@
             color: #fff;
         }
 
+        .btn-toggle {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 4px 12px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-toggle.active {
+            background: var(--success);
+            color: #fff;
+            border-color: var(--success);
+        }
+
+        .btn-toggle.inactive {
+            background: rgba(231, 76, 60, 0.15);
+            color: var(--accent);
+            border-color: rgba(231, 76, 60, 0.2);
+        }
+
         /* ---- Cards Grid ---- */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 14px;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 12px;
         }
 
         .admin-card {
@@ -453,7 +530,7 @@
         }
 
         .admin-card .card-img {
-            height: 110px;
+            height: 100px;
             background-size: cover;
             background-position: center;
             position: relative;
@@ -461,21 +538,21 @@
 
         .admin-card .card-img .card-actions {
             position: absolute;
-            top: 6px;
-            right: 6px;
+            top: 4px;
+            right: 4px;
             display: flex;
-            gap: 4px;
+            gap: 3px;
         }
 
         .admin-card .card-img .card-actions button {
             background: rgba(0, 0, 0, 0.7);
             border: none;
             color: #fff;
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 10px;
             transition: var(--transition);
             backdrop-filter: blur(4px);
         }
@@ -485,11 +562,11 @@
         }
 
         .admin-card .card-body {
-            padding: 10px 12px 12px;
+            padding: 8px 10px 10px;
         }
 
         .admin-card .card-body .card-title {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             white-space: nowrap;
             overflow: hidden;
@@ -497,7 +574,7 @@
         }
 
         .admin-card .card-body .card-meta {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-secondary);
             margin-top: 2px;
         }
@@ -506,10 +583,10 @@
             display: inline-block;
             background: var(--accent-glow);
             color: var(--accent);
-            font-size: 10px;
-            padding: 1px 8px;
-            border-radius: 10px;
-            margin-top: 4px;
+            font-size: 9px;
+            padding: 1px 6px;
+            border-radius: 8px;
+            margin-top: 3px;
         }
 
         /* ---- Form Modals ---- */
@@ -532,8 +609,8 @@
         .modal-box {
             background: var(--bg-secondary);
             border-radius: var(--radius);
-            padding: 32px;
-            max-width: 700px;
+            padding: 28px;
+            max-width: 650px;
             width: 100%;
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
@@ -551,9 +628,9 @@
         }
 
         .modal-box h3 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .modal-box h3 i {
@@ -562,15 +639,15 @@
         }
 
         .modal-box .form-group {
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .modal-box .form-group label {
             display: block;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
             color: var(--text-secondary);
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .modal-box .form-group label .required {
@@ -581,19 +658,19 @@
         .modal-box .form-group textarea,
         .modal-box .form-group select {
             width: 100%;
-            padding: 10px 14px;
+            padding: 8px 12px;
             background: var(--bg-input);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border-radius: 6px;
             color: var(--text-primary);
-            font-size: 14px;
+            font-size: 13px;
             font-family: 'Inter', sans-serif;
             transition: var(--transition);
             outline: none;
         }
 
         .modal-box .form-group textarea {
-            min-height: 60px;
+            min-height: 50px;
             resize: vertical;
         }
 
@@ -611,34 +688,28 @@
         .modal-box .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .modal-box .form-row-3 {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
+            gap: 10px;
         }
 
         .modal-box .episode-entry {
             background: var(--bg-card);
-            border-radius: 8px;
-            padding: 14px;
-            margin-bottom: 10px;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 8px;
             border: 1px solid var(--border-color);
             position: relative;
         }
 
         .modal-box .episode-entry .remove-ep {
             position: absolute;
-            top: 6px;
-            right: 8px;
+            top: 4px;
+            right: 6px;
             background: none;
             border: none;
             color: var(--accent);
             cursor: pointer;
-            font-size: 14px;
-            padding: 4px 8px;
+            font-size: 12px;
+            padding: 2px 6px;
             border-radius: 4px;
             transition: var(--transition);
         }
@@ -649,17 +720,17 @@
 
         .modal-box .episode-entry .ep-fields {
             display: grid;
-            grid-template-columns: 60px 1fr 1fr;
-            gap: 10px;
+            grid-template-columns: 50px 1fr 1fr;
+            gap: 8px;
         }
 
         .modal-box .episode-entry .ep-fields input {
             background: var(--bg-input);
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 8px 10px;
+            border-radius: 4px;
+            padding: 6px 8px;
             color: var(--text-primary);
-            font-size: 13px;
+            font-size: 12px;
             outline: none;
             transition: var(--transition);
         }
@@ -677,11 +748,11 @@
             background: rgba(255, 255, 255, 0.05);
             border: 1px dashed var(--border-color);
             color: var(--text-secondary);
-            padding: 10px;
-            border-radius: 8px;
+            padding: 8px;
+            border-radius: 6px;
             cursor: pointer;
             width: 100%;
-            font-size: 13px;
+            font-size: 12px;
             transition: var(--transition);
             font-family: 'Inter', sans-serif;
         }
@@ -692,24 +763,17 @@
             background: rgba(231, 76, 60, 0.05);
         }
 
-        .modal-box .episode-counter {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            display: block;
-        }
-
         .modal-box .modal-actions {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 8px;
+            margin-top: 16px;
         }
 
         .modal-box .modal-actions button {
-            padding: 10px 24px;
-            border-radius: 8px;
+            padding: 8px 20px;
+            border-radius: 6px;
             border: none;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             cursor: pointer;
             transition: var(--transition);
@@ -737,23 +801,23 @@
         /* ---- Toast Notifications ---- */
         .toast-container {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
+            bottom: 20px;
+            right: 20px;
             z-index: 2000;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .toast {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            padding: 14px 24px;
-            border-radius: 8px;
-            font-size: 14px;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 13px;
             box-shadow: var(--shadow);
             animation: slideUp 0.3s ease;
-            max-width: 360px;
+            max-width: 320px;
             border-left: 4px solid var(--accent);
         }
 
@@ -780,6 +844,86 @@
             }
         }
 
+        /* ---- Toggle Cards for Site Settings ---- */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .settings-card {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .settings-card:hover {
+            border-color: rgba(231, 76, 60, 0.2);
+        }
+
+        .settings-card .setting-label {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .settings-card .setting-label i {
+            color: var(--accent);
+            margin-right: 6px;
+            width: 18px;
+        }
+
+        .settings-card .toggle-switch {
+            position: relative;
+            width: 40px;
+            height: 22px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .settings-card .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .settings-card .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: var(--bg-input);
+            border-radius: 22px;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+
+        .settings-card .toggle-slider::before {
+            content: '';
+            position: absolute;
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .settings-card .toggle-switch input:checked+.toggle-slider {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .settings-card .toggle-switch input:checked+.toggle-slider::before {
+            transform: translateX(18px);
+            background: #fff;
+        }
+
         /* ============================================================
            RESPONSIVE
            ============================================================ */
@@ -789,19 +933,19 @@
             }
 
             #loginScreen {
-                padding: 28px 20px;
+                padding: 24px 18px;
             }
 
             .admin-body {
-                padding: 16px 16px 24px;
+                padding: 14px 14px 20px;
                 max-height: 75vh;
             }
 
             .admin-header {
-                padding: 14px 16px;
+                padding: 12px 14px;
                 flex-direction: column;
                 align-items: stretch;
-                gap: 10px;
+                gap: 8px;
             }
 
             .admin-header .user-info {
@@ -810,43 +954,55 @@
             }
 
             .cards-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr 1fr;
             }
 
             .modal-box {
-                padding: 20px;
+                padding: 16px;
                 margin: 10px;
             }
 
-            .modal-box .form-row,
-            .modal-box .form-row-3 {
+            .modal-box .form-row {
                 grid-template-columns: 1fr;
             }
 
             .modal-box .episode-entry .ep-fields {
                 grid-template-columns: 1fr;
-                gap: 6px;
+                gap: 4px;
             }
 
             .section-header {
                 flex-direction: column;
                 align-items: stretch;
-                gap: 8px;
+                gap: 6px;
             }
 
             .admin-card .card-img {
-                height: 80px;
+                height: 70px;
+            }
+
+            .admin-tabs .tab-btn {
+                padding: 6px 12px;
+                font-size: 12px;
             }
         }
 
         @media (max-width: 480px) {
             .cards-grid {
-                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-                gap: 10px;
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 8px;
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr;
             }
 
             .admin-card .card-body .card-title {
-                font-size: 12px;
+                font-size: 11px;
             }
 
             .modal-box .modal-actions {
@@ -854,11 +1010,11 @@
             }
 
             .admin-header .brand h2 {
-                font-size: 18px;
+                font-size: 16px;
             }
 
             .admin-header .user-info .email {
-                font-size: 12px;
+                font-size: 11px;
             }
         }
     </style>
@@ -872,7 +1028,7 @@
     <div id="loginScreen">
         <div class="logo">
             <h1>Streaming<span>Hub</span></h1>
-            <p>Advanced Admin Panel</p>
+            <p>Admin Panel — Simple & Powerful</p>
         </div>
 
         <form id="loginForm" autocomplete="off">
@@ -899,7 +1055,7 @@
         <!-- Header -->
         <div class="admin-header">
             <div class="brand">
-                <h2>Streaming<span>Hub</span> <small>Advanced Admin</small></h2>
+                <h2>Streaming<span>Hub</span> <small>Admin</small></h2>
             </div>
             <div class="user-info">
                 <div class="avatar" id="adminAvatar">A</div>
@@ -913,80 +1069,143 @@
             </div>
         </div>
 
-        <!-- Body -->
+        <!-- Tabs -->
         <div class="admin-body">
+            <div class="admin-tabs">
+                <button class="tab-btn active" data-tab="content"><i class="fas fa-film"></i> Content</button>
+                <button class="tab-btn" data-tab="settings"><i class="fas fa-sliders-h"></i> Site Settings</button>
+                <button class="tab-btn" data-tab="nav"><i class="fas fa-bars"></i> Navigation</button>
+            </div>
 
-            <!-- ====== BANNER / HERO ====== -->
-            <div class="section-header">
-                <h3><i class="fas fa-images"></i> Hero Banners</h3>
-                <div class="actions">
-                    <span class="badge-count" id="heroCount">0 slides</span>
-                    <button class="btn-add btn-add-sm" onclick="openModal('hero')"><i class="fas fa-plus"></i> Add</button>
-                    <button class="btn-success btn-add-sm" onclick="loadFromFirestore()"><i class="fas fa-cloud-download-alt"></i> Load</button>
+            <!-- ====== TAB 1: CONTENT ====== -->
+            <div class="tab-content active" id="tab-content">
+
+                <!-- HERO BANNERS -->
+                <div class="section-header">
+                    <h3><i class="fas fa-images"></i> Hero Banners</h3>
+                    <div class="actions">
+                        <span class="badge-count" id="heroCount">0 slides</span>
+                        <button class="btn-add btn-add-sm" onclick="openModal('hero')"><i class="fas fa-plus"></i> Add</button>
+                    </div>
+                </div>
+                <div class="cards-grid" id="heroGrid"></div>
+
+                <!-- TRENDING -->
+                <div class="section-header">
+                    <h3><i class="fas fa-fire"></i> Trending Now</h3>
+                    <div class="actions">
+                        <span class="badge-count" id="trendingCount">0 items</span>
+                        <button class="btn-add btn-add-sm" onclick="openModal('trending')"><i class="fas fa-plus"></i> Add</button>
+                    </div>
+                </div>
+                <div class="cards-grid" id="trendingGrid"></div>
+
+                <!-- POPULAR -->
+                <div class="section-header">
+                    <h3><i class="fas fa-star"></i> Popular Shows</h3>
+                    <div class="actions">
+                        <span class="badge-count" id="popularCount">0 items</span>
+                        <button class="btn-add btn-add-sm" onclick="openModal('popular')"><i class="fas fa-plus"></i> Add</button>
+                    </div>
+                </div>
+                <div class="cards-grid" id="popularGrid"></div>
+
+                <!-- RECENTLY ADDED -->
+                <div class="section-header">
+                    <h3><i class="fas fa-clock"></i> Recently Added</h3>
+                    <div class="actions">
+                        <span class="badge-count" id="recentCount">0 items</span>
+                        <button class="btn-add btn-add-sm" onclick="openModal('recent')"><i class="fas fa-plus"></i> Add</button>
+                    </div>
+                </div>
+                <div class="cards-grid" id="recentGrid"></div>
+
+                <!-- LIVE ACTION -->
+                <div class="section-header">
+                    <h3><i class="fas fa-video"></i> Live Action</h3>
+                    <div class="actions">
+                        <span class="badge-count" id="liveCount">0 items</span>
+                        <button class="btn-add btn-add-sm" onclick="openModal('live')"><i class="fas fa-plus"></i> Add</button>
+                    </div>
+                </div>
+                <div class="cards-grid" id="liveGrid"></div>
+
+                <!-- TOP VIEWS -->
+                <div class="section-header">
+                    <h3><i class="fas fa-chart-simple"></i> Top Views (Sidebar)</h3>
+                    <div class="actions">
+                        <span class="badge-count" id="topViewsCount">0 items</span>
+                        <button class="btn-add btn-add-sm" onclick="openModal('topViews')"><i class="fas fa-plus"></i> Add</button>
+                    </div>
+                </div>
+                <div class="cards-grid" id="topViewsGrid"></div>
+
+                <!-- COMMENTS -->
+                <div class="section-header">
+                    <h3><i class="fas fa-comment"></i> Latest Comments</h3>
+                    <div class="actions">
+                        <span class="badge-count" id="commentsCount">0 items</span>
+                        <button class="btn-add btn-add-sm" onclick="openModal('comments')"><i class="fas fa-plus"></i> Add</button>
+                    </div>
+                </div>
+                <div class="cards-grid" id="commentsGrid"></div>
+
+            </div>
+
+            <!-- ====== TAB 2: SITE SETTINGS ====== -->
+            <div class="tab-content" id="tab-settings">
+                <div class="section-header">
+                    <h3><i class="fas fa-paint-brush"></i> Branding</h3>
+                </div>
+                <div class="settings-grid">
+                    <div class="settings-card">
+                        <span class="setting-label"><i class="fas fa-font"></i> Site Name</span>
+                        <input type="text" id="siteNameInput" style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:4px;padding:4px 8px;color:var(--text-primary);font-size:13px;width:140px;">
+                    </div>
+                    <div class="settings-card">
+                        <span class="setting-label"><i class="fas fa-image"></i> Logo URL</span>
+                        <input type="text" id="logoUrlInput" style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:4px;padding:4px 8px;color:var(--text-primary);font-size:13px;width:140px;">
+                    </div>
+                </div>
+
+                <div class="section-header" style="margin-top:20px;">
+                    <h3><i class="fas fa-eye"></i> Show/Hide Sections</h3>
+                    <button class="btn-add btn-add-sm" onclick="saveSiteSettings()"><i class="fas fa-save"></i> Save All</button>
+                </div>
+                <div class="settings-grid" id="sectionToggles">
+                    <!-- Toggles injected by JS -->
+                </div>
+
+                <div class="section-header" style="margin-top:20px;">
+                    <h3><i class="fas fa-user"></i> Auth Buttons</h3>
+                </div>
+                <div class="settings-grid" id="authToggles">
+                    <!-- Auth toggles injected by JS -->
                 </div>
             </div>
-            <div class="cards-grid" id="heroGrid"></div>
 
-            <!-- ====== ANIME COLLECTIONS ====== -->
-            <!-- TRENDING -->
-            <div class="section-header">
-                <h3><i class="fas fa-fire"></i> Trending Now</h3>
-                <div class="actions">
-                    <span class="badge-count" id="trendingCount">0 items</span>
-                    <button class="btn-add btn-add-sm" onclick="openModal('trending')"><i class="fas fa-plus"></i> Add</button>
+            <!-- ====== TAB 3: NAVIGATION ====== -->
+            <div class="tab-content" id="tab-nav">
+                <div class="section-header">
+                    <h3><i class="fas fa-bars"></i> Top Navigation Links</h3>
+                    <button class="btn-add btn-add-sm" onclick="addNavItem()"><i class="fas fa-plus"></i> Add Link</button>
+                </div>
+                <div id="navItemsContainer">
+                    <!-- Nav items injected by JS -->
+                </div>
+
+                <div class="section-header" style="margin-top:20px;">
+                    <h3><i class="fas fa-link"></i> Footer Links</h3>
+                    <button class="btn-add btn-add-sm" onclick="addFooterItem()"><i class="fas fa-plus"></i> Add Link</button>
+                </div>
+                <div id="footerItemsContainer">
+                    <!-- Footer items injected by JS -->
+                </div>
+
+                <div style="margin-top:16px;">
+                    <button class="btn-success" onclick="saveNavSettings()"><i class="fas fa-save"></i> Save Navigation</button>
                 </div>
             </div>
-            <div class="cards-grid" id="trendingGrid"></div>
-
-            <!-- POPULAR -->
-            <div class="section-header">
-                <h3><i class="fas fa-star"></i> Popular Shows</h3>
-                <div class="actions">
-                    <span class="badge-count" id="popularCount">0 items</span>
-                    <button class="btn-add btn-add-sm" onclick="openModal('popular')"><i class="fas fa-plus"></i> Add</button>
-                </div>
-            </div>
-            <div class="cards-grid" id="popularGrid"></div>
-
-            <!-- RECENTLY ADDED -->
-            <div class="section-header">
-                <h3><i class="fas fa-clock"></i> Recently Added</h3>
-                <div class="actions">
-                    <span class="badge-count" id="recentCount">0 items</span>
-                    <button class="btn-add btn-add-sm" onclick="openModal('recent')"><i class="fas fa-plus"></i> Add</button>
-                </div>
-            </div>
-            <div class="cards-grid" id="recentGrid"></div>
-
-            <!-- LIVE ACTION -->
-            <div class="section-header">
-                <h3><i class="fas fa-video"></i> Live Action</h3>
-                <div class="actions">
-                    <span class="badge-count" id="liveCount">0 items</span>
-                    <button class="btn-add btn-add-sm" onclick="openModal('live')"><i class="fas fa-plus"></i> Add</button>
-                </div>
-            </div>
-            <div class="cards-grid" id="liveGrid"></div>
-
-            <!-- TOP VIEWS -->
-            <div class="section-header">
-                <h3><i class="fas fa-chart-simple"></i> Top Views (Sidebar)</h3>
-                <div class="actions">
-                    <span class="badge-count" id="topViewsCount">0 items</span>
-                    <button class="btn-add btn-add-sm" onclick="openModal('topViews')"><i class="fas fa-plus"></i> Add</button>
-                </div>
-            </div>
-            <div class="cards-grid" id="topViewsGrid"></div>
-
-            <!-- COMMENTS -->
-            <div class="section-header">
-                <h3><i class="fas fa-comment"></i> Latest Comments</h3>
-                <div class="actions">
-                    <span class="badge-count" id="commentsCount">0 items</span>
-                    <button class="btn-add btn-add-sm" onclick="openModal('comments')"><i class="fas fa-plus"></i> Add</button>
-                </div>
-            </div>
-            <div class="cards-grid" id="commentsGrid"></div>
 
         </div>
     </div>
@@ -1056,16 +1275,6 @@
             const STORAGE_PREFIX = 'streaminghub_';
             let isSynced = false;
             const FIRESTORE_COLLECTION = 'websiteData';
-
-            const COLLECTIONS = {
-                hero: { label: 'Hero Banners', default: [] },
-                trending: { label: 'Trending', default: [] },
-                popular: { label: 'Popular', default: [] },
-                recent: { label: 'Recent', default: [] },
-                live: { label: 'Live Action', default: [] },
-                topViews: { label: 'Top Views', default: [] },
-                comments: { label: 'Comments', default: [] }
-            };
 
             const DEFAULT_DATA = {
                 hero: [
@@ -1140,7 +1349,32 @@
                     { user: 'OtakuKing', text: 'Best anime of the season hands down.', time: '5 hours ago' },
                     { user: 'WeebMaster', text: 'Can\'t wait for the next season!', time: '1 day ago' },
                     { user: 'SakuraLover', text: 'The animation quality is insane.', time: '2 days ago' }
-                ]
+                ],
+                siteSettings: {
+                    siteName: 'StreamingHub',
+                    logo: 'img/logo.png',
+                    showHero: true,
+                    showAllAnimes: true,
+                    showTrending: true,
+                    showPopular: true,
+                    showRecent: true,
+                    showLive: true,
+                    showSidebar: true,
+                    showLogin: true,
+                    showRegister: true,
+                    navItems: [
+                        { label: 'Home', link: './index.html', active: true },
+                        { label: 'Categories', link: './categories.html', active: false },
+                        { label: 'Blog', link: './blog.html', active: false },
+                        { label: 'Contact', link: '#', active: false }
+                    ],
+                    footerNav: [
+                        { label: 'Home', link: './index.html' },
+                        { label: 'Categories', link: './categories.html' },
+                        { label: 'Blog', link: './blog.html' },
+                        { label: 'Contact', link: '#' }
+                    ]
+                }
             };
 
             // ============================================================
@@ -1168,6 +1402,19 @@
                 updateSyncStatus(false);
             }
 
+            function getSettings() {
+                try {
+                    const stored = localStorage.getItem(STORAGE_PREFIX + 'siteSettings');
+                    if (stored) return JSON.parse(stored);
+                } catch (e) { /* ignore */ }
+                return DEFAULT_DATA.siteSettings;
+            }
+
+            function saveSettings(settings) {
+                localStorage.setItem(STORAGE_PREFIX + 'siteSettings', JSON.stringify(settings));
+                updateSyncStatus(false);
+            }
+
             function showToast(message, type = 'success') {
                 const container = document.getElementById('toastContainer');
                 const toast = document.createElement('div');
@@ -1176,12 +1423,7 @@
                 container.appendChild(toast);
                 setTimeout(() => {
                     toast.remove();
-                }, 4000);
-            }
-
-            function getInitials(name) {
-                if (!name) return 'A';
-                return name.charAt(0).toUpperCase();
+                }, 3500);
             }
 
             function updateSyncStatus(synced) {
@@ -1203,7 +1445,11 @@
             function getAllData() {
                 const data = {};
                 Object.keys(DEFAULT_DATA).forEach(key => {
-                    data[key] = getData(key);
+                    if (key === 'siteSettings') {
+                        data[key] = getSettings();
+                    } else {
+                        data[key] = getData(key);
+                    }
                 });
                 return data;
             }
@@ -1233,15 +1479,17 @@
                             }
                         });
                         renderAll();
+                        renderSiteSettingsUI();
+                        renderNavUI();
                         updateSyncStatus(true);
-                        showToast('✅ Data loaded from Firestore successfully!', 'success');
+                        showToast('✅ Data loaded from Firestore!', 'success');
                     } else {
-                        showToast('ℹ️ No data found in Firestore. Syncing defaults...', 'info');
+                        showToast('ℹ️ No data found. Syncing defaults...', 'info');
                         await syncToFirestore();
                     }
                 } catch (error) {
                     console.error('Load error:', error);
-                    showToast('❌ Failed to load from Firestore: ' + error.message, 'error');
+                    showToast('❌ Failed to load: ' + error.message, 'error');
                 }
             }
 
@@ -1255,7 +1503,7 @@
                 if (grid) {
                     if (data.length === 0) {
                         grid.innerHTML =
-                            `<div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:20px;">No items yet. Click "Add" to create one.</div>`;
+                            `<div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:16px;font-size:13px;">No items yet. Click "Add" to create one.</div>`;
                     } else {
                         grid.innerHTML = data.map((item, index) => renderFn(item, index, key)).join('');
                     }
@@ -1277,13 +1525,12 @@
                                 <button onclick="editItem('${key}', ${index})" title="Edit"><i class="fas fa-pen"></i></button>
                                 <button onclick="deleteItem('${key}', ${index})" title="Delete"><i class="fas fa-trash"></i></button>
                             </div>
-                            ${hasVideo ? '<span style="position:absolute;bottom:6px;left:6px;background:rgba(46,204,113,0.8);padding:2px 8px;border-radius:4px;font-size:10px;"><i class="fas fa-play"></i> Ready</span>' : ''}
+                            ${hasVideo ? '<span style="position:absolute;bottom:4px;left:4px;background:rgba(46,204,113,0.8);padding:1px 6px;border-radius:3px;font-size:9px;"><i class="fas fa-play"></i></span>' : ''}
                         </div>
                         <div class="card-body">
                             <div class="card-title">${item.title || 'Untitled'}</div>
                             <div class="card-meta">${item.ep || ''} · ${item.views || 0} views</div>
-                            ${seasonInfo ? `<div class="card-meta">Season ${item.season} · ${epCount} episodes</div>` : ''}
-                            ${tags ? `<div class="card-meta" style="font-size:10px;color:var(--text-muted);">${tags}</div>` : ''}
+                            ${seasonInfo ? `<div class="card-meta">Season ${item.season} · ${epCount} eps</div>` : ''}
                             ${epCount > 0 ? `<div class="episode-badge"><i class="fas fa-play-circle"></i> ${epCount} eps</div>` : ''}
                         </div>
                     </div>
@@ -1301,7 +1548,7 @@
                         </div>
                         <div class="card-body">
                             <div class="card-title">${item.title || 'Untitled'}</div>
-                            <div class="card-meta">${item.label || ''} · ${item.desc ? item.desc.substring(0,30)+'...' : ''}</div>
+                            <div class="card-meta">${item.label || ''} · ${item.desc ? item.desc.substring(0,25)+'...' : ''}</div>
                         </div>
                     </div>
                 `;
@@ -1319,7 +1566,7 @@
                         <div class="card-body">
                             <div class="card-title">${item.title || 'Untitled'}</div>
                             <div class="card-meta">${item.ep || ''} · ${item.views || 0} views</div>
-                            <div class="card-meta" style="font-size:10px;color:var(--text-muted);">${item.filter || ''}</div>
+                            <div class="card-meta" style="font-size:9px;color:var(--text-muted);">${item.filter || ''}</div>
                         </div>
                     </div>
                 `;
@@ -1328,13 +1575,13 @@
             function renderCommentCard(item, index) {
                 return `
                     <div class="admin-card">
-                        <div class="card-body" style="padding:12px;">
+                        <div class="card-body" style="padding:10px;">
                             <div class="card-title">${item.user || 'Anonymous'}</div>
-                            <div class="card-meta" style="font-size:12px;color:var(--text-secondary);">${item.text || ''}</div>
-                            <div class="card-meta" style="font-size:11px;color:var(--text-muted);margin-top:4px;">${item.time || ''}</div>
-                            <div style="margin-top:6px;">
-                                <button onclick="editItem('comments', ${index})" class="btn-danger" style="padding:2px 10px;font-size:11px;"><i class="fas fa-pen"></i></button>
-                                <button onclick="deleteItem('comments', ${index})" class="btn-danger" style="padding:2px 10px;font-size:11px;"><i class="fas fa-trash"></i></button>
+                            <div class="card-meta" style="font-size:11px;color:var(--text-secondary);">${item.text || ''}</div>
+                            <div class="card-meta" style="font-size:10px;color:var(--text-muted);margin-top:2px;">${item.time || ''}</div>
+                            <div style="margin-top:4px;">
+                                <button onclick="editItem('comments', ${index})" class="btn-danger" style="padding:1px 8px;font-size:10px;"><i class="fas fa-pen"></i></button>
+                                <button onclick="deleteItem('comments', ${index})" class="btn-danger" style="padding:1px 8px;font-size:10px;"><i class="fas fa-trash"></i></button>
                             </div>
                         </div>
                     </div>
@@ -1352,6 +1599,172 @@
             }
 
             // ============================================================
+            // SITE SETTINGS UI
+            // ============================================================
+            function renderSiteSettingsUI() {
+                const settings = getSettings();
+
+                // Branding
+                document.getElementById('siteNameInput').value = settings.siteName || 'StreamingHub';
+                document.getElementById('logoUrlInput').value = settings.logo || 'img/logo.png';
+
+                // Section toggles
+                const sectionToggles = document.getElementById('sectionToggles');
+                const sections = [
+                    { key: 'showHero', label: 'Hero Slider', icon: 'fa-images' },
+                    { key: 'showAllAnimes', label: 'All Animes', icon: 'fa-list' },
+                    { key: 'showTrending', label: 'Trending Now', icon: 'fa-fire' },
+                    { key: 'showPopular', label: 'Popular Shows', icon: 'fa-star' },
+                    { key: 'showRecent', label: 'Recently Added', icon: 'fa-clock' },
+                    { key: 'showLive', label: 'Live Action', icon: 'fa-video' },
+                    { key: 'showSidebar', label: 'Sidebar (Top Views)', icon: 'fa-chart-simple' }
+                ];
+
+                sectionToggles.innerHTML = sections.map(s => {
+                    const val = settings[s.key] !== undefined ? settings[s.key] : true;
+                    return `
+                        <div class="settings-card">
+                            <span class="setting-label"><i class="fas ${s.icon}"></i> ${s.label}</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" data-setting="${s.key}" ${val ? 'checked' : ''}>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    `;
+                }).join('');
+
+                // Auth toggles
+                const authToggles = document.getElementById('authToggles');
+                authToggles.innerHTML = `
+                    <div class="settings-card">
+                        <span class="setting-label"><i class="fas fa-sign-in-alt"></i> Show Login Button</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" data-setting="showLogin" ${settings.showLogin !== false ? 'checked' : ''}>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="settings-card">
+                        <span class="setting-label"><i class="fas fa-user-plus"></i> Show Register Button</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" data-setting="showRegister" ${settings.showRegister !== false ? 'checked' : ''}>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                `;
+            }
+
+            function saveSiteSettings() {
+                const settings = getSettings();
+                settings.siteName = document.getElementById('siteNameInput').value.trim() || 'StreamingHub';
+                settings.logo = document.getElementById('logoUrlInput').value.trim() || 'img/logo.png';
+
+                document.querySelectorAll('#sectionToggles input[type="checkbox"]').forEach(cb => {
+                    settings[cb.dataset.setting] = cb.checked;
+                });
+
+                document.querySelectorAll('#authToggles input[type="checkbox"]').forEach(cb => {
+                    settings[cb.dataset.setting] = cb.checked;
+                });
+
+                saveSettings(settings);
+                showToast('✅ Site settings saved!', 'success');
+                updateSyncStatus(false);
+            }
+
+            // ============================================================
+            // NAVIGATION UI
+            // ============================================================
+            function renderNavUI() {
+                const settings = getSettings();
+
+                // Nav items
+                const navContainer = document.getElementById('navItemsContainer');
+                navContainer.innerHTML = settings.navItems.map((item, index) => `
+                    <div class="settings-card" style="margin-bottom:8px;">
+                        <div style="display:flex;gap:10px;flex:1;flex-wrap:wrap;">
+                            <input type="text" class="nav-label" value="${item.label}" placeholder="Label" style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:4px;padding:4px 8px;color:var(--text-primary);font-size:13px;width:120px;">
+                            <input type="text" class="nav-link" value="${item.link}" placeholder="Link URL" style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:4px;padding:4px 8px;color:var(--text-primary);font-size:13px;width:180px;">
+                            <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-secondary);">
+                                <input type="checkbox" class="nav-active" ${item.active ? 'checked' : ''}> Active
+                            </label>
+                        </div>
+                        <button class="btn-danger" onclick="removeNavItem(${index})" style="padding:2px 8px;font-size:11px;"><i class="fas fa-times"></i></button>
+                    </div>
+                `).join('') || '<p style="color:var(--text-muted);padding:10px;">No nav items. Click "Add Link" to create one.</p>';
+
+                // Footer items
+                const footerContainer = document.getElementById('footerItemsContainer');
+                footerContainer.innerHTML = settings.footerNav.map((item, index) => `
+                    <div class="settings-card" style="margin-bottom:8px;">
+                        <div style="display:flex;gap:10px;flex:1;flex-wrap:wrap;">
+                            <input type="text" class="footer-label" value="${item.label}" placeholder="Label" style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:4px;padding:4px 8px;color:var(--text-primary);font-size:13px;width:120px;">
+                            <input type="text" class="footer-link" value="${item.link}" placeholder="Link URL" style="background:var(--bg-input);border:1px solid var(--border-color);border-radius:4px;padding:4px 8px;color:var(--text-primary);font-size:13px;width:180px;">
+                        </div>
+                        <button class="btn-danger" onclick="removeFooterItem(${index})" style="padding:2px 8px;font-size:11px;"><i class="fas fa-times"></i></button>
+                    </div>
+                `).join('') || '<p style="color:var(--text-muted);padding:10px;">No footer items. Click "Add Link" to create one.</p>';
+            }
+
+            window.addNavItem = function() {
+                const settings = getSettings();
+                settings.navItems.push({ label: 'New Link', link: '#', active: false });
+                saveSettings(settings);
+                renderNavUI();
+                showToast('✅ Nav item added!', 'success');
+            };
+
+            window.removeNavItem = function(index) {
+                const settings = getSettings();
+                settings.navItems.splice(index, 1);
+                saveSettings(settings);
+                renderNavUI();
+                showToast('✅ Nav item removed!', 'success');
+            };
+
+            window.addFooterItem = function() {
+                const settings = getSettings();
+                settings.footerNav.push({ label: 'New Link', link: '#' });
+                saveSettings(settings);
+                renderNavUI();
+                showToast('✅ Footer item added!', 'success');
+            };
+
+            window.removeFooterItem = function(index) {
+                const settings = getSettings();
+                settings.footerNav.splice(index, 1);
+                saveSettings(settings);
+                renderNavUI();
+                showToast('✅ Footer item removed!', 'success');
+            };
+
+            function saveNavSettings() {
+                const settings = getSettings();
+
+                // Collect nav items
+                const navItems = [];
+                document.querySelectorAll('#navItemsContainer .settings-card').forEach(card => {
+                    const label = card.querySelector('.nav-label')?.value?.trim() || 'Link';
+                    const link = card.querySelector('.nav-link')?.value?.trim() || '#';
+                    const active = card.querySelector('.nav-active')?.checked || false;
+                    navItems.push({ label, link, active });
+                });
+                settings.navItems = navItems;
+
+                // Collect footer items
+                const footerItems = [];
+                document.querySelectorAll('#footerItemsContainer .settings-card').forEach(card => {
+                    const label = card.querySelector('.footer-label')?.value?.trim() || 'Link';
+                    const link = card.querySelector('.footer-link')?.value?.trim() || '#';
+                    footerItems.push({ label, link });
+                });
+                settings.footerNav = footerItems;
+
+                saveSettings(settings);
+                showToast('✅ Navigation saved!', 'success');
+                updateSyncStatus(false);
+            }
+
+            // ============================================================
             // CRUD OPERATIONS
             // ============================================================
             window.deleteItem = function(key, index) {
@@ -1361,7 +1774,7 @@
                 data.splice(index, 1);
                 setData(key, data);
                 renderAll();
-                showToast('Item deleted successfully!', 'success');
+                showToast('Item deleted!', 'success');
             };
 
             window.editItem = function(key, index) {
@@ -1373,7 +1786,7 @@
             };
 
             // ============================================================
-            // EPISODE HELPER FUNCTIONS
+            // EPISODE HELPERS
             // ============================================================
             let episodeCounter = 0;
 
@@ -1428,7 +1841,7 @@
             const FIELD_DEFS = {
                 hero: [
                     { name: 'title', label: 'Title', type: 'text', required: true },
-                    { name: 'label', label: 'Label (e.g. Adventure)', type: 'text' },
+                    { name: 'label', label: 'Label', type: 'text' },
                     { name: 'desc', label: 'Description', type: 'textarea' },
                     { name: 'image', label: 'Image URL', type: 'text', placeholder: 'https://example.com/image.jpg' },
                     { name: 'link', label: 'Link URL', type: 'text', placeholder: '#' }
@@ -1436,7 +1849,7 @@
                 trending: [
                     { name: 'title', label: 'Title', type: 'text', required: true },
                     { name: 'image', label: 'Image URL', type: 'text', placeholder: 'https://example.com/image.jpg' },
-                    { name: 'ep', label: 'Episode (e.g. 18 / 18)', type: 'text' },
+                    { name: 'ep', label: 'Episode (e.g. 18/18)', type: 'text' },
                     { name: 'views', label: 'Views', type: 'number' },
                     { name: 'comments', label: 'Comments', type: 'number' },
                     { name: 'season', label: 'Season Number', type: 'number' },
@@ -1478,12 +1891,12 @@
                     { name: 'image', label: 'Image URL', type: 'text', placeholder: 'https://example.com/image.jpg' },
                     { name: 'ep', label: 'Episode', type: 'text' },
                     { name: 'views', label: 'Views', type: 'number' },
-                    { name: 'filter', label: 'Filter (e.g. day, week, month, years)', type: 'text' }
+                    { name: 'filter', label: 'Filter (day, week, month, years)', type: 'text' }
                 ],
                 comments: [
                     { name: 'user', label: 'Username', type: 'text', required: true },
                     { name: 'text', label: 'Comment Text', type: 'textarea', required: true },
-                    { name: 'time', label: 'Time (e.g. 2 hours ago)', type: 'text' }
+                    { name: 'time', label: 'Time', type: 'text' }
                 ]
             };
 
@@ -1496,11 +1909,9 @@
 
                 const isEdit = index !== undefined && index >= 0;
                 modalTitle.innerHTML =
-                    `<i class="fas fa-${isEdit ? 'edit' : 'plus-circle'}"></i> ${isEdit ? 'Edit' : 'Add New'} ${COLLECTIONS[type]?.label || type}`;
+                    `<i class="fas fa-${isEdit ? 'edit' : 'plus-circle'}"></i> ${isEdit ? 'Edit' : 'Add New'} ${type.charAt(0).toUpperCase() + type.slice(1)}`;
 
                 let html = '';
-                let episodesContainer = null;
-
                 defs.forEach(field => {
                     let value = isEdit ? (item[field.name] !== undefined ? item[field.name] : '') : '';
                     if (field.name === 'tags' && Array.isArray(value)) {
@@ -1513,20 +1924,17 @@
                         html += `
                             <div class="form-group">
                                 <label>${field.label} ${required}</label>
-                                <div id="episodesContainer">
-                                    <!-- Episode entries will be rendered here -->
-                                </div>
+                                <div id="episodesContainer"></div>
                                 <button type="button" class="add-episode-btn" id="addEpisodeBtn">
                                     <i class="fas fa-plus"></i> Add Episode
                                 </button>
                             </div>
                         `;
-                        // We'll handle episodes after rendering
                     } else if (field.type === 'textarea') {
                         html += `
                             <div class="form-group">
                                 <label for="field_${field.name}">${field.label} ${required}</label>
-                                <textarea id="field_${field.name}" name="${field.name}" ${placeholder} rows="3">${value}</textarea>
+                                <textarea id="field_${field.name}" name="${field.name}" ${placeholder} rows="2">${value}</textarea>
                             </div>
                         `;
                     } else if (field.type === 'number') {
@@ -1548,17 +1956,15 @@
 
                 modalFields.innerHTML = html;
 
-                // Handle episodes if present
+                // Handle episodes
                 if (type !== 'hero' && type !== 'topViews' && type !== 'comments') {
                     const container = document.getElementById('episodesContainer');
                     if (container) {
                         if (isEdit && item.episodes) {
                             loadEpisodesIntoForm(container, item.episodes);
                         } else {
-                            // Add one empty episode by default
                             addEpisodeEntry(container, 1, 'Episode 1', '');
                         }
-                        // Add episode button
                         const addBtn = document.getElementById('addEpisodeBtn');
                         if (addBtn) {
                             addBtn.addEventListener('click', function() {
@@ -1626,8 +2032,29 @@
 
                 setData(type, data);
                 renderAll();
-                showToast(`Item ${index >= 0 ? 'updated' : 'added'} successfully!`, 'success');
+                showToast(`Item ${index >= 0 ? 'updated' : 'added'}!`, 'success');
                 closeModal();
+            });
+
+            // ============================================================
+            // TAB SWITCHING
+            // ============================================================
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const tabId = this.dataset.tab;
+                    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                    document.getElementById('tab-' + tabId).classList.add('active');
+
+                    // Refresh UI when switching to settings or nav tabs
+                    if (tabId === 'settings') {
+                        renderSiteSettingsUI();
+                    } else if (tabId === 'nav') {
+                        renderNavUI();
+                    }
+                });
             });
 
             // ============================================================
@@ -1650,6 +2077,8 @@
                     adminEmailDisplay.textContent = ADMIN_CREDENTIALS.email;
                     adminAvatar.textContent = 'A';
                     renderAll();
+                    renderSiteSettingsUI();
+                    renderNavUI();
                     loadFromFirestore();
                 } else {
                     loginScreen.style.display = 'block';
@@ -1686,7 +2115,7 @@
 
             adminLogout.addEventListener('click', function() {
                 sessionStorage.removeItem('adminLoggedIn');
-                showToast('Logged out successfully.', 'success');
+                showToast('Logged out.', 'success');
                 checkAuth();
             });
 
@@ -1724,12 +2153,11 @@
 
             checkAuth();
 
-            console.log('🛠️ StreamingHub Advanced Admin Panel loaded.');
+            console.log('🛠️ StreamingHub Admin Panel loaded.');
             console.log('📦 Data stored in localStorage with prefix:', STORAGE_PREFIX);
             console.log('🔑 Default credentials: admin@streaminghub.com / 123456');
-            console.log('☁️ Firestore collection:', FIRESTORE_COLLECTION);
             console.log('💡 Press Ctrl+S to sync to Firestore');
-            console.log('📺 Add episodes with YouTube links easily using the form!');
+            console.log('📋 Use the tabs to manage content, settings, and navigation!');
 
         })();
     </script>
